@@ -14,36 +14,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
     try {
-      label_1:
-      while (true) {
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case INPUT:
-          jj_consume_token(INPUT);
-          jj_consume_token(SYMBOL);
-          jj_consume_token(DOUBLE_POINT);
-          Array();
-          jj_consume_token(21);
-          break;
-        case OUTPUT:
-          jj_consume_token(OUTPUT);
-          jj_consume_token(SYMBOL);
-          jj_consume_token(21);
-          break;
-        default:
-          jj_la1[0] = jj_gen;
-          jj_consume_token(-1);
-          throw new ParseException();
-        }
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case INPUT:
-        case OUTPUT:
-          ;
-          break;
-        default:
-          jj_la1[1] = jj_gen;
-          break label_1;
-        }
-      }
+      Expr();
       jj_consume_token(LF);
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
@@ -70,57 +41,79 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     throw new Error("Missing return statement in function");
   }
 
+  static final public void Expr() throws ParseException {
+    label_1:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case INPUT:
+        jj_consume_token(INPUT);
+        jj_consume_token(SYMBOL);
+        jj_consume_token(DOUBLE_POINT);
+        Array();
+        jj_consume_token(21);
+        break;
+      case OUTPUT:
+        jj_consume_token(OUTPUT);
+        jj_consume_token(SYMBOL);
+        jj_consume_token(21);
+        break;
+      default:
+        jj_la1[0] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case INPUT:
+      case OUTPUT:
+        ;
+        break;
+      default:
+        jj_la1[1] = jj_gen;
+        break label_1;
+      }
+    }
+  }
+
   static final public void Array() throws ParseException {
-              /*@bgen(jjtree) Array */
-  SimpleNode jjtn000 = new SimpleNode(JJTARRAY);
+    jj_consume_token(BRACKET_LEFT);
+    InnerArray();
+    label_2:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 22:
+        ;
+        break;
+      default:
+        jj_la1[2] = jj_gen;
+        break label_2;
+      }
+      jj_consume_token(22);
+      InnerArray();
+    }
+    jj_consume_token(BRACKET_RIGHT);
+  }
+
+  static final public void InnerArray() throws ParseException {
+                   /*@bgen(jjtree) InnerArray */
+  SimpleNode jjtn000 = new SimpleNode(JJTINNERARRAY);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
     try {
       jj_consume_token(BRACKET_LEFT);
-      InnerArray();
-      label_2:
+      V();
+      label_3:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case 22:
           ;
           break;
         default:
-          jj_la1[2] = jj_gen;
-          break label_2;
+          jj_la1[3] = jj_gen;
+          break label_3;
         }
         jj_consume_token(22);
-        InnerArray();
+        V();
       }
-      jj_consume_token(BRACKET_RIGHT);
-    } catch (Throwable jjte000) {
-  if (jjtc000) {
-    jjtree.clearNodeScope(jjtn000);
-    jjtc000 = false;
-  } else {
-    jjtree.popNode();
-  }
-  if (jjte000 instanceof RuntimeException) {
-    {if (true) throw (RuntimeException)jjte000;}
-  }
-  if (jjte000 instanceof ParseException) {
-    {if (true) throw (ParseException)jjte000;}
-  }
-  {if (true) throw (Error)jjte000;}
-    } finally {
-  if (jjtc000) {
-    jjtree.closeNodeScope(jjtn000, true);
-  }
-    }
-  }
-
-  static final public void InnerArray() throws ParseException {
-                   /*@bgen(jjtree) InnerArray */
-                   SimpleNode jjtn000 = new SimpleNode(JJTINNERARRAY);
-                   boolean jjtc000 = true;
-                   jjtree.openNodeScope(jjtn000);Token i;
-    try {
-      jj_consume_token(BRACKET_LEFT);
-      V();
       jj_consume_token(BRACKET_RIGHT);
     } catch (Throwable jjte000) {
      if (jjtc000) {
@@ -144,51 +137,19 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
   }
 
   static final public void V() throws ParseException {
-          /*@bgen(jjtree) V */
-          SimpleNode jjtn000 = new SimpleNode(JJTV);
-          boolean jjtc000 = true;
-          jjtree.openNodeScope(jjtn000);Token i,s;
-    try {
-      i = jj_consume_token(INTEGER);
+               Token i;
+    i = jj_consume_token(INTEGER);
                  SimpleNode jjtn001 = new SimpleNode(JJTTERM);
                  boolean jjtc001 = true;
                  jjtree.openNodeScope(jjtn001);
-      try {
+    try {
                  jjtree.closeNodeScope(jjtn001, true);
                  jjtc001 = false;
         jjtn001.val = i.image;
-      } finally {
+    } finally {
                  if (jjtc001) {
                    jjtree.closeNodeScope(jjtn001, true);
                  }
-      }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 22:
-        jj_consume_token(22);
-        V();
-        break;
-      default:
-        jj_la1[3] = jj_gen;
-        ;
-      }
-    } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      {if (true) throw (RuntimeException)jjte000;}
-    }
-    if (jjte000 instanceof ParseException) {
-      {if (true) throw (ParseException)jjte000;}
-    }
-    {if (true) throw (Error)jjte000;}
-    } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
     }
   }
 

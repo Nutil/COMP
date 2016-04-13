@@ -23,22 +23,23 @@ public class Matrix{  public static void main(String args []) throws ParseExce
 
 
 SimpleNode S() : {}{
-  (   <INPUT> < SYMBOL > < DOUBLE_POINT > Array() ";" | < OUTPUT > < SYMBOL > ";"
-  )+
+  Expr()
   < LF >  {    return jjtThis;
   }}
 
-void Array():{}{
-< BRACKET_LEFT > (InnerArray())(","InnerArray())*  < BRACKET_RIGHT >  }
-void InnerArray():{Token i;}{   < BRACKET_LEFT >      V()   < BRACKET_RIGHT >   }
+void Expr() #void:{}
+{
+  (
+   <INPUT> < SYMBOL > < DOUBLE_POINT > Array() ";" | < OUTPUT > < SYMBOL > ";"
+  )+}
 
-void V():{Token i,s;} 
+void Array()#void:{}{
+< BRACKET_LEFT > (InnerArray())(","InnerArray())*  < BRACKET_RIGHT >  }
+void InnerArray():{}{   < BRACKET_LEFT >      V()(","V())*   < BRACKET_RIGHT >   }
+
+void V()#void:{Token i;} 
 {
   i=< INTEGER >{
 	jjtThis.val = i.image;
-    } #Term
-    [
-    ","V()
-    ]
-  
-}
+    }#Term
+ }
