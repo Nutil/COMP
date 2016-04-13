@@ -1,7 +1,11 @@
 /**
  * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
- */options{  static = true;}PARSER_BEGIN(Matrix)
-public class Matrix{  public static void main(String args []) throws ParseException  {    Matrix parser = new Matrix(System.in);    while (true)    {      System.out.println("Reading from standard input...");      System.out.print("Enter an expression like \"1+(2+3)*4;\" :");      try      {        switch (Matrix.one_line())        {          case 0 :           System.out.println("OK.");          break;          case 1 :           System.out.println("Goodbye.");          break;          default :           break;        }      }      catch (Exception e)      {        System.out.println("NOK.");        System.out.println(e.getMessage());        Matrix.ReInit(System.in);      }      catch (Error e)      {        System.out.println("Oops.");        System.out.println(e.getMessage());        break;      }    }  }}PARSER_END(Matrix)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >
+ */options{   LOOKAHEAD=1;}PARSER_BEGIN(Matrix)
+public class Matrix{  public static void main(String args []) throws ParseException  {    Matrix parser = new Matrix(System.in);
+	SimpleNode root = parser.S();
+	root.dump("");
+	
+  }}PARSER_END(Matrix)SKIP :{  " "| "\r"| "\t"}TOKEN : /* OPERATORS */{  < PLUS : "+" > | < MINUS : "-" >| < MULTIPLY : "*" >
 | < TRANSPOSE: "'" >| < EQUALS: "=" >
 | < DOUBLE_POINT : ":" >
 
@@ -13,4 +17,28 @@ public class Matrix{  public static void main(String args []) throws ParseExce
 | < SYMBOL: ["A"-"Z","a"-"z"](["0"-"9","A"-"Z","a"-"z"])* >
 | < TYPE: "boolean" | "byte" | "short" | "int" | "long" | "float" | "double" >
 | < INTEGER: (["0"-"9"])+ >
-| < DOUBLE:  (["0"-"9"])+ ("." (["0"-"9"])+)? >}TOKEN :{  < CONSTANT : (< DIGIT >)+ >| < #DIGIT : [ "0"-"9" ] >}
+| < DOUBLE:  (["0"-"9"])+ ("." (["0"-"9"])+)? >|   < CONSTANT : (< DIGIT >)+ >| < DIGIT : [ "0"-"9" ] >
+| < LF: "\n" > 
+}
+
+
+SimpleNode S() : {}{
+  (   <INPUT> < SYMBOL > < DOUBLE_POINT > Array() ";" | < OUTPUT > < SYMBOL > ";"
+  )+
+  < LF >  {    return jjtThis;
+  }}
+
+void Array():{}{
+< BRACKET_LEFT > (InnerArray())(","InnerArray())*  < BRACKET_RIGHT >  }
+void InnerArray():{Token i;}{   < BRACKET_LEFT >      V()   < BRACKET_RIGHT >   }
+
+void V():{Token i,s;} 
+{
+  i=< INTEGER >{
+	jjtThis.val = i.image;
+    } #Term
+    [
+    ","V()
+    ]
+  
+}

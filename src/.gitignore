@@ -3,3 +3,10 @@
 /SimpleCharStream.java
 /Token.java
 /TokenMgrError.java
+/Matrix.java
+/MatrixTokenManager.java
+/JJTMatrixState.java
+/MatrixDSL.jj
+/MatrixTreeConstants.java
+/Node.java
+/SimpleNode.java
