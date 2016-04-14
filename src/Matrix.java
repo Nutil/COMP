@@ -55,7 +55,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
         try {
      jjtree.closeNodeScope(jjtn001, true);
      jjtc001 = false;
-        jjtn001.val = i.image;
+        jjtn001.value = i.image;
         } finally {
      if (jjtc001) {
        jjtree.closeNodeScope(jjtn001, true);
@@ -186,7 +186,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     try {
                  jjtree.closeNodeScope(jjtn001, true);
                  jjtc001 = false;
-        jjtn001.val = i.image;
+        jjtn001.value = i.image;
     } finally {
                  if (jjtc001) {
                    jjtree.closeNodeScope(jjtn001, true);
