@@ -1,7 +1,17 @@
 /**
  * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
  */options{   LOOKAHEAD=1;}PARSER_BEGIN(Matrix)
-public class Matrix{  public static void main(String args []) throws ParseException  {    Matrix parser = new Matrix(System.in);
+import java.util.Hashtable;
+
+
+public class Matrix{
+  public static String currentSymbol;
+  public static String currentSymbolString; 
+  public static Hashtable<String, String> symbolTable;
+    public static void main(String args []) throws ParseException  {    Matrix parser = new Matrix(System.in);
+    parser.currentSymbol = null;
+    parser.currentSymbolString = null;
+    parser.symbolTable = new Hashtable< String, String >();
 	SimpleNode root = parser.S();
 	root.dump("");
 	
@@ -11,12 +21,13 @@ public class Matrix{  public static void main(String args []) throws ParseExce
 
 | < BRACKET_LEFT: "[" >
 | < BRACKET_RIGHT: "]" >
+| < PARENTHESIS_LEFT: "(" >
+| < PARENTHESIS_RIGHT: ")" >
 | < INPUT : "input" >
 | < OUTPUT : "output" >
 
 | < SYMBOL: ["A"-"Z","a"-"z"](["0"-"9","A"-"Z","a"-"z"])* >
 | < TYPE: "boolean" | "byte" | "short" | "int" | "long" | "float" | "double" >
-| < INTEGER: (["0"-"9"])+ >
 | < DOUBLE:  (["0"-"9"])+ ("." (["0"-"9"])+)? >|   < CONSTANT : (< DIGIT >)+ >| < DIGIT : [ "0"-"9" ] >
 | < LF: "\n" > 
 }
@@ -31,22 +42,147 @@ void Expr() #void:{Token i;}
 {
   (
    <INPUT> i=< SYMBOL >   {
-	jjtThis.value = i.image;
-    }#Variavel
-     < DOUBLE_POINT > Array() ";" | < OUTPUT > < SYMBOL > ";"
-  )+}
+	symbolTable.put(i.image, "");
+	currentSymbol = i.image;
+	currentSymbolString = "";
+    
+	//jjtThis.value = i.image;
+    }#Input
+     < DOUBLE_POINT > Array() ";"
+     {
+       symbolTable.put(currentSymbol, currentSymbolString);
+       currentSymbol=null;
+       currentSymbolString="";     }
+    < LF >
+  )+
+  (  < OUTPUT > i=< SYMBOL >
+   {
+   	if(symbolTable.get(i.image) != null) {
+   		System.err.println("Can't output to a variable you've already initialized!");
+   		return;
+   	}
+	symbolTable.put(i.image, "");
+	currentSymbol = i.image;
+	currentSymbolString = "";
 
-void Array()#void:{}{
-< BRACKET_LEFT > Valores()  < BRACKET_RIGHT >  }
+	//jjtThis.value = i.image;
+
+	}
+	#Output
+    < DOUBLE_POINT > MathExpression() ";"     {
+       symbolTable.put(currentSymbol, currentSymbolString);
+       currentSymbol=null;
+       currentSymbolString="";
+     }
+  )?}
+
+void Array()#void:{Token i;}{
+i=< BRACKET_LEFT >{
+  currentSymbolString += i.image;}
+Valores()
+i=< BRACKET_RIGHT >{
+  currentSymbolString += i.image;}  }
 void Valores() :{}{
-  (InnerArray())(","InnerArray())*}
+  (InnerArray())
+  {
+    currentSymbolString += ",";  }
+  (","InnerArray())*}
 
 
-void InnerArray():{}{   < BRACKET_LEFT >      V()(","V())*   < BRACKET_RIGHT >}
+void InnerArray():{Token i;}{   i=< BRACKET_LEFT >   {
+     currentSymbolString += i.image;   }    V()   {
+     currentSymbolString += ",";   }
+   (","V())*   i=< BRACKET_RIGHT >
+   {
+     currentSymbolString += i.image;
+   } }
 
 void V()#void:{Token i;} 
 {
-  i=< INTEGER >{
+  i=< DOUBLE >{
 	jjtThis.value = i.image;
+	currentSymbolString += i.image;
     }#Term
  }
+
+void MathExpression() :{}{
+	(
+    	Priority1(1)
+	)+}
+
+void Priority1(int sign) #void:{}{
+ Priority2(sign)
+ 
+ (
+ < PLUS >
+ {
+   currentSymbolString += "+";
+ }
+ Priority2(1) #Add(2)
+ |
+ < MINUS >
+  {
+   currentSymbolString += "-";
+  }
+ Priority2(1) #Sub(2)
+ )?
+ 
+}
+
+void Priority2(int sign) #void: {} // 1: positive; -1: negative
+{
+ Priority3(sign)
+ (
+  < MULTIPLY >
+   {
+   currentSymbolString += "*";
+   }
+ Priority3(1) #Mul(2)
+ )?
+}
+
+void Priority3(int sign) #void: {} // 1: positive; -1: negative
+{
+ Priority4(sign)
+ (
+  < TRANSPOSE >
+ {
+   currentSymbolString += "'";
+ }
+   Priority4(1) #Tra(2)
+ )?
+}
+
+void Priority4(int sign) #void: {Token i;}
+{
+ i=< DOUBLE >
+  {
+   currentSymbolString += i.image;
+	//jjtThis.value = sign * Double.parseDouble(i.image);
+} #Term
+ | < MINUS >
+ {
+   currentSymbolString += "-";
+ }
+  Priority4(sign * -1)
+ | < BRACKET_LEFT >
+ {
+   currentSymbolString += "(";
+ }
+  Priority1(sign)
+  < BRACKET_RIGHT >
+ {
+   currentSymbolString += ")";
+ }
+ | i=< SYMBOL >
+ {
+   	if(symbolTable.get(i.image) == null) {
+   		System.err.println("Uninitialized variable");
+   		return;
+   	}
+
+   	currentSymbolString += i.image;
+   	
+//jjtThis.value = symbolTable.get(i.image);
+ } #Term
+}
