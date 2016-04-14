@@ -149,28 +149,20 @@ void Priority3(int sign) #void: {} // 1: positive; -1: negative
  {
    currentSymbolString += "'";
  }
+ )?
+ (
    Priority4(1) #Tra(2)
  )?
 }
 
 void Priority4(int sign) #void: {Token i;}
 {
- i=< DOUBLE >
-  {
-   currentSymbolString += i.image;
-	//jjtThis.value = sign * Double.parseDouble(i.image);
-} #Term
- | < MINUS >
- {
-   currentSymbolString += "-";
- }
-  Priority4(sign * -1)
- | < BRACKET_LEFT >
+ < PARENTHESIS_LEFT >
  {
    currentSymbolString += "(";
  }
   Priority1(sign)
-  < BRACKET_RIGHT >
+  < PARENTHESIS_RIGHT >
  {
    currentSymbolString += ")";
  }
@@ -183,6 +175,5 @@ void Priority4(int sign) #void: {Token i;}
 
    	currentSymbolString += i.image;
    	
-//jjtThis.value = symbolTable.get(i.image);
  } #Term
 }

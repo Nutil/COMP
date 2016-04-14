@@ -255,10 +255,8 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
       while (true) {
         Priority1(1);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case MINUS:
-        case BRACKET_LEFT:
+        case PARENTHESIS_LEFT:
         case SYMBOL:
-        case DOUBLE:
           ;
           break;
         default:
@@ -404,6 +402,14 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     case TRANSPOSE:
       jj_consume_token(TRANSPOSE);
    currentSymbolString += "'";
+      break;
+    default:
+      jj_la1[8] = jj_gen;
+      ;
+    }
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case PARENTHESIS_LEFT:
+    case SYMBOL:
      SimpleNode jjtn001 = new SimpleNode(JJTTRA);
      boolean jjtc001 = true;
      jjtree.openNodeScope(jjtn001);
@@ -430,7 +436,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
       }
       break;
     default:
-      jj_la1[8] = jj_gen;
+      jj_la1[9] = jj_gen;
       ;
     }
   }
@@ -438,60 +444,35 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
   static final public void Priority4(int sign) throws ParseException {
                                  Token i;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case DOUBLE:
-      i = jj_consume_token(DOUBLE);
-    SimpleNode jjtn001 = new SimpleNode(JJTTERM);
-    boolean jjtc001 = true;
-    jjtree.openNodeScope(jjtn001);
-      try {
-    jjtree.closeNodeScope(jjtn001, true);
-    jjtc001 = false;
-   currentSymbolString += i.image;
-        //jjtThis.value = sign * Double.parseDouble(i.image);
-
-      } finally {
-    if (jjtc001) {
-      jjtree.closeNodeScope(jjtn001, true);
-    }
-      }
-      break;
-    case MINUS:
-      jj_consume_token(MINUS);
-   currentSymbolString += "-";
-      Priority4(sign * -1);
-      break;
-    case BRACKET_LEFT:
-      jj_consume_token(BRACKET_LEFT);
+    case PARENTHESIS_LEFT:
+      jj_consume_token(PARENTHESIS_LEFT);
    currentSymbolString += "(";
       Priority1(sign);
-      jj_consume_token(BRACKET_RIGHT);
+      jj_consume_token(PARENTHESIS_RIGHT);
    currentSymbolString += ")";
       break;
     case SYMBOL:
       i = jj_consume_token(SYMBOL);
-   SimpleNode jjtn002 = new SimpleNode(JJTTERM);
-   boolean jjtc002 = true;
-   jjtree.openNodeScope(jjtn002);
+   SimpleNode jjtn001 = new SimpleNode(JJTTERM);
+   boolean jjtc001 = true;
+   jjtree.openNodeScope(jjtn001);
       try {
-   jjtree.closeNodeScope(jjtn002, true);
-   jjtc002 = false;
+   jjtree.closeNodeScope(jjtn001, true);
+   jjtc001 = false;
         if(symbolTable.get(i.image) == null) {
                 System.err.println("Uninitialized variable");
                 {if (true) return;}
         }
 
         currentSymbolString += i.image;
-
-//jjtThis.value = symbolTable.get(i.image);
-
       } finally {
-   if (jjtc002) {
-     jjtree.closeNodeScope(jjtn002, true);
+   if (jjtc001) {
+     jjtree.closeNodeScope(jjtn001, true);
    }
       }
       break;
     default:
-      jj_la1[9] = jj_gen;
+      jj_la1[10] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -507,13 +488,13 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[10];
+  static final private int[] jj_la1 = new int[11];
   static private int[] jj_la1_0;
   static {
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x4000,0x8000,0x800000,0x800000,0x50420,0x30,0x30,0x40,0x80,0x50420,};
+      jj_la1_0 = new int[] {0x4000,0x8000,0x800000,0x800000,0x11000,0x30,0x30,0x40,0x80,0x11000,0x11000,};
    }
 
   /** Constructor with InputStream. */
@@ -534,7 +515,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -549,7 +530,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -566,7 +547,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -577,7 +558,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -593,7 +574,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -603,7 +584,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     jj_ntk = -1;
     jjtree.reset();
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 11; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -659,7 +640,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 11; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
