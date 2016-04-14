@@ -37,8 +37,12 @@ void Expr() #void:{Token i;}
   )+}
 
 void Array()#void:{}{
-< BRACKET_LEFT > (Linha())(","Linha())*  < BRACKET_RIGHT >  }
-void Linha():{}{   < BRACKET_LEFT >      V()(","V())*   < BRACKET_RIGHT >   }
+< BRACKET_LEFT > Valores()  < BRACKET_RIGHT >  }
+void Valores() :{}{
+  (InnerArray())(","InnerArray())*}
+
+
+void InnerArray():{}{   < BRACKET_LEFT >      V()(","V())*   < BRACKET_RIGHT >   }
 
 void V()#void:{Token i;} 
 {
