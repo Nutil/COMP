@@ -42,12 +42,25 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
   }
 
   static final public void Expr() throws ParseException {
+                   Token i;
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case INPUT:
         jj_consume_token(INPUT);
-        jj_consume_token(SYMBOL);
+        i = jj_consume_token(SYMBOL);
+     SimpleNode jjtn001 = new SimpleNode(JJTVARIAVEL);
+     boolean jjtc001 = true;
+     jjtree.openNodeScope(jjtn001);
+        try {
+     jjtree.closeNodeScope(jjtn001, true);
+     jjtc001 = false;
+        jjtn001.val = i.image;
+        } finally {
+     if (jjtc001) {
+       jjtree.closeNodeScope(jjtn001, true);
+     }
+        }
         jj_consume_token(DOUBLE_POINT);
         Array();
         jj_consume_token(21);
@@ -76,7 +89,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
 
   static final public void Array() throws ParseException {
     jj_consume_token(BRACKET_LEFT);
-    InnerArray();
+    Linha();
     label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -88,14 +101,14 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
         break label_2;
       }
       jj_consume_token(22);
-      InnerArray();
+      Linha();
     }
     jj_consume_token(BRACKET_RIGHT);
   }
 
-  static final public void InnerArray() throws ParseException {
-                   /*@bgen(jjtree) InnerArray */
-  SimpleNode jjtn000 = new SimpleNode(JJTINNERARRAY);
+  static final public void Linha() throws ParseException {
+              /*@bgen(jjtree) Linha */
+  SimpleNode jjtn000 = new SimpleNode(JJTLINHA);
   boolean jjtc000 = true;
   jjtree.openNodeScope(jjtn000);
     try {

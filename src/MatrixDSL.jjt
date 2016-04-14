@@ -27,15 +27,18 @@ SimpleNode S() : {}{
   < LF >  {    return jjtThis;
   }}
 
-void Expr() #void:{}
+void Expr() #void:{Token i;}
 {
   (
-   <INPUT> < SYMBOL > < DOUBLE_POINT > Array() ";" | < OUTPUT > < SYMBOL > ";"
+   <INPUT> i=< SYMBOL >   {
+	jjtThis.val = i.image;
+    }#Variavel
+     < DOUBLE_POINT > Array() ";" | < OUTPUT > < SYMBOL > ";"
   )+}
 
 void Array()#void:{}{
-< BRACKET_LEFT > (InnerArray())(","InnerArray())*  < BRACKET_RIGHT >  }
-void InnerArray():{}{   < BRACKET_LEFT >      V()(","V())*   < BRACKET_RIGHT >   }
+< BRACKET_LEFT > (Linha())(","Linha())*  < BRACKET_RIGHT >  }
+void Linha():{}{   < BRACKET_LEFT >      V()(","V())*   < BRACKET_RIGHT >   }
 
 void V()#void:{Token i;} 
 {
