@@ -1,7 +1,12 @@
 /**
  * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
  */options{   LOOKAHEAD=1;}PARSER_BEGIN(Matrix)
+package Matrix;
+
+
 import java.util.Hashtable;
+
+
 
 
 public class Matrix{
@@ -40,22 +45,34 @@ SimpleNode S() : {}{
 
 void Expr() #void:{Token i;}
 {
+  Input()
+  Output()
+ }
+
+void Input() #input :{Token i;}{
   (
-   <INPUT> i=< SYMBOL >   {
+   <INPUT> i=< SYMBOL >
+   {
 	symbolTable.put(i.image, "");
 	currentSymbol = i.image;
 	currentSymbolString = "";
     
-	//jjtThis.value = i.image;
-    }#Input
+	jjtThis.val = i.image;
+    }
      < DOUBLE_POINT > Array() ";"
      {
        symbolTable.put(currentSymbol, currentSymbolString);
        currentSymbol=null;
-       currentSymbolString="";     }
+       currentSymbolString="";
+     }
     < LF >
-  )+
-  (  < OUTPUT > i=< SYMBOL >
+  )+}
+
+
+void Output()  #output:{Token i;}
+{
+    (
+  < OUTPUT > i=< SYMBOL >
    {
    	if(symbolTable.get(i.image) != null) {
    		System.err.println("Can't output to a variable you've already initialized!");
@@ -65,16 +82,17 @@ void Expr() #void:{Token i;}
 	currentSymbol = i.image;
 	currentSymbolString = "";
 
-	//jjtThis.value = i.image;
+	jjtThis.val = i.image;
 
 	}
-	#Output
-    < DOUBLE_POINT > MathExpression() ";"     {
+    < DOUBLE_POINT > MathExpression() ";"
+     {
        symbolTable.put(currentSymbol, currentSymbolString);
        currentSymbol=null;
        currentSymbolString="";
      }
-  )?}
+  )?
+}
 
 void Array()#void:{Token i;}{
 i=< BRACKET_LEFT >{
@@ -100,7 +118,7 @@ void InnerArray():{Token i;}{   i=< BRACKET_LEFT >   {
 void V()#void:{Token i;} 
 {
   i=< DOUBLE >{
-	jjtThis.value = i.image;
+	jjtThis.val = i.image;
 	currentSymbolString += i.image;
     }#Term
  }
@@ -172,6 +190,7 @@ void Priority4(int sign) #void: {Token i;}
    		System.err.println("Uninitialized variable");
    		return;
    	}
+   	
 
    	currentSymbolString += i.image;
    	
