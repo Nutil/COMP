@@ -6,8 +6,7 @@ package Matrix;
 
 import java.util.Hashtable;
 
-
-
+import semantica.Semantica;
 
 public class Matrix{
   public static String currentSymbol;
@@ -17,7 +16,7 @@ public class Matrix{
 	public static void dfs(Node node, String prefix) {
 	
 		  	SimpleNode n = (SimpleNode) node; 
-	
+	  	
 		  	Object obj = n.jjtGetValue();
 			System.out.println(prefix + n.toString() + "(" + obj + (obj != null? " - " + obj.getClass().getName(): "") + ")");
 	
@@ -25,13 +24,13 @@ public class Matrix{
 				dfs(n.jjtGetChild(i), prefix + "\t");
 			}
 		}
-	    public static void main(String args []) throws ParseException  {    Matrix parser = new Matrix(System.in);
+	    public static void main(String args [])throws Exception  {    Matrix parser = new Matrix(System.in);
     parser.currentSymbol = null;
     parser.currentSymbolString = null;
     parser.symbolTable = new Hashtable< String, String >();
 	SimpleNode root = parser.S();
 
-	
+	Semantica.analise(root);
 	Matrix.dfs(root,"");
 
   }}PARSER_END(Matrix)SKIP :{  " "| "\r"| "\t"}TOKEN : /* OPERATORS */{  < PLUS : "+" > | < MINUS : "-" >| < MULTIPLY : "*" >
@@ -152,5 +151,5 @@ void Priority4(int sign) #void: {Token i;}
  | i=< SYMBOL >
  {
    jjtThis.jjtSetValue( i.image); 	
- } #Term
+ } #Matrix
 }

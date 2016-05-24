@@ -4,8 +4,7 @@ package Matrix;
 
 import java.util.Hashtable;
 
-
-
+import semantica.Semantica;
 
 public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConstants {/*@bgen(jjtree)*/
   protected static JJTMatrixState jjtree = new JJTMatrixState();public static String currentSymbol;
@@ -24,7 +23,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
                         }
                 }
 
-  public static void main(String args []) throws ParseException
+  public static void main(String args [])throws Exception
   {
     Matrix parser = new Matrix(System.in);
     parser.currentSymbol = null;
@@ -32,7 +31,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     parser.symbolTable = new Hashtable< String, String >();
         SimpleNode root = parser.S();
 
-
+        Semantica.analise(root);
         Matrix.dfs(root,"");
 
   }
@@ -423,7 +422,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
       break;
     case SYMBOL:
       i = jj_consume_token(SYMBOL);
-   SimpleNode jjtn001 = new SimpleNode(JJTTERM);
+   SimpleNode jjtn001 = new SimpleNode(JJTMATRIX);
    boolean jjtc001 = true;
    jjtree.openNodeScope(jjtn001);
       try {

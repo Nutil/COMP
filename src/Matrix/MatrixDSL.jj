@@ -7,8 +7,7 @@ package Matrix;
 
 import java.util.Hashtable;
 
-
-
+import semantica.Semantica;
 
 public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants/*@egen*/{/*@bgen(jjtree)*/
   protected static JJTMatrixState jjtree = new JJTMatrixState();
@@ -21,7 +20,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants/*@egen*/{/*@
 	public static void dfs(Node node, String prefix) {
 	
 		  	SimpleNode n = (SimpleNode) node; 
-	
+	  	
 		  	Object obj = n.jjtGetValue();
 			System.out.println(prefix + n.toString() + "(" + obj + (obj != null? " - " + obj.getClass().getName(): "") + ")");
 	
@@ -29,13 +28,13 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants/*@egen*/{/*@
 				dfs(n.jjtGetChild(i), prefix + "\t");
 			}
 		}
-	    public static void main(String args []) throws ParseException  {    Matrix parser = new Matrix(System.in);
+	    public static void main(String args [])throws Exception  {    Matrix parser = new Matrix(System.in);
     parser.currentSymbol = null;
     parser.currentSymbolString = null;
     parser.symbolTable = new Hashtable< String, String >();
 	SimpleNode root = parser.S();
 
-	
+	Semantica.analise(root);
 	Matrix.dfs(root,"");
 
   }}PARSER_END(Matrix)SKIP :{  " "| "\r"| "\t"}TOKEN : /* OPERATORS */{  < PLUS : "+" > | < MINUS : "-" >| < MULTIPLY : "*" >
@@ -387,9 +386,9 @@ void Priority4(int sign)      : {Token i;}
   Priority1(sign)
   < PARENTHESIS_RIGHT >
 
- | i=< SYMBOL >/*@bgen(jjtree) Term */
+ | i=< SYMBOL >/*@bgen(jjtree) Matrix */
  {
-   SimpleNode jjtn001 = new SimpleNode(JJTTERM);
+   SimpleNode jjtn001 = new SimpleNode(JJTMATRIX);
    boolean jjtc001 = true;
    jjtree.openNodeScope(jjtn001);
  }
@@ -408,5 +407,5 @@ void Priority4(int sign)      : {Token i;}
      jjtree.closeNodeScope(jjtn001, true);
    }
  }
-/*@egen*/      
+/*@egen*/        
 }

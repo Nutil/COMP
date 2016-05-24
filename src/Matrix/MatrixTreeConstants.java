@@ -13,6 +13,7 @@ public interface MatrixTreeConstants
   public int JJTSUB = 7;
   public int JJTMUL = 8;
   public int JJTTRA = 9;
+  public int JJTMATRIX = 10;
 
 
   public String[] jjtNodeName = {
@@ -26,6 +27,7 @@ public interface MatrixTreeConstants
     "Sub",
     "Mul",
     "Tra",
+    "Matrix",
   };
 }
-/* JavaCC - OriginalChecksum=ae71a9134ce19d9263a90361301b22c0 (do not edit this line) */
+/* JavaCC - OriginalChecksum=da177d7354033fd29a8208cf64ba9900 (do not edit this line) */
