@@ -30,6 +30,8 @@ public class Matrix{
     parser.currentSymbolString = null;
     parser.symbolTable = new Hashtable< String, String >();
 	SimpleNode root = parser.S();
+
+	
 	Matrix.dfs(root,"");
 
   }}PARSER_END(Matrix)SKIP :{  " "| "\r"| "\t"}TOKEN : /* OPERATORS */{  < PLUS : "+" > | < MINUS : "-" >| < MULTIPLY : "*" >
@@ -57,28 +59,19 @@ SimpleNode S() : {}{
 
 void Expr() #void:{Token i;}
 {
-  Input()
+   (    Input()< LF >
+  )+
   Output()
  }
 
 void Input() #input :{Token i;}{
-  (
    <INPUT> i=< SYMBOL >
-   {
-	symbolTable.put(i.image, "");
-	currentSymbol = i.image;
-	currentSymbolString = "";
-    
-	jjtThis.value = i.image;
+   {  
+	jjtThis.jjtSetValue( i.image);
     }
-     < DOUBLE_POINT > Array() ";"
-     {
-       symbolTable.put(currentSymbol, currentSymbolString);
-       currentSymbol=null;
-       currentSymbolString="";
-     }
-    < LF >
-  )+}
+    < DOUBLE_POINT > Array() ";"
+
+  }
 
 
 void Output()  #output:{Token i;}
@@ -86,54 +79,32 @@ void Output()  #output:{Token i;}
     (
   < OUTPUT > i=< SYMBOL >
    {
-   	if(symbolTable.get(i.image) != null) {
-   		System.err.println("Can't output to a variable you've already initialized!");
-   		return;
-   	}
-	symbolTable.put(i.image, "");
-	currentSymbol = i.image;
-	currentSymbolString = "";
-
-	jjtThis.value = i.image;
+	jjtThis.jjtSetValue(i.image);
 
 	}
     < DOUBLE_POINT > MathExpression() ";"
-     {
-       symbolTable.put(currentSymbol, currentSymbolString);
-       currentSymbol=null;
-       currentSymbolString="";
-     }
   )?
 }
 
 void Array()#void:{Token i;}{
-i=< BRACKET_LEFT >{
-  currentSymbolString += i.image;}
+< BRACKET_LEFT >
 Valores()
-i=< BRACKET_RIGHT >{
-  currentSymbolString += i.image;}  }
+< BRACKET_RIGHT > }
 void Valores() #void:{}{
   (InnerArray())
-  {
-    currentSymbolString += ",";  }
   (","InnerArray())*}
 
 
-void InnerArray():{Token i;}{   i=< BRACKET_LEFT >   {
-     currentSymbolString += i.image;   }    V()   {
-     currentSymbolString += ",";   }
-   (","V())*   i=< BRACKET_RIGHT >
-   {
-     currentSymbolString += i.image;
-   } }
+void InnerArray():{}{   < BRACKET_LEFT >     Term()  
+   (","Term())*   < BRACKET_RIGHT >
+  }
 
-void V()#void:{Token i;} 
+void Term():{Token i;} 
 {
   i=< DOUBLE >{
-	jjtThis.value = Double.parseDouble(i.image);
-	currentSymbolString += i.image;
-    }#Term
- }
+	jjtThis.jjtSetValue(Double.parseDouble(i.image));
+    }
+ } 
 
 void MathExpression() #void:{}{
 	(
@@ -142,18 +113,11 @@ void MathExpression() #void:{}{
 
 void Priority1(int sign) #void:{}{
  Priority2(sign)
- 
  (
  < PLUS >
- {
-   currentSymbolString += "+";
- }
  Priority2(1) #Add(2)
  |
  < MINUS >
-  {
-   currentSymbolString += "-";
-  }
  Priority2(1) #Sub(2)
  )?
  
@@ -164,9 +128,6 @@ void Priority2(int sign) #void: {} // 1: positive; -1: negative
  Priority3(sign)
  (
   < MULTIPLY >
-   {
-   currentSymbolString += "*";
-   }
  Priority3(1) #Mul(2)
  )?
 }
@@ -176,9 +137,6 @@ void Priority3(int sign) #void: {} // 1: positive; -1: negative
  Priority4(sign)
  (
   < TRANSPOSE >
- {
-   currentSymbolString += "'";
- }
  )?
  (
    Priority4(1) #Tra(2)
@@ -188,23 +146,11 @@ void Priority3(int sign) #void: {} // 1: positive; -1: negative
 void Priority4(int sign) #void: {Token i;}
 {
  < PARENTHESIS_LEFT >
- {
-   currentSymbolString += "(";
- }
   Priority1(sign)
   < PARENTHESIS_RIGHT >
- {
-   currentSymbolString += ")";
- }
+
  | i=< SYMBOL >
  {
-   	if(symbolTable.get(i.image) == null) {
-   		System.err.println("Uninitialized variable");
-   		return;
-   	}
-   	
-	jjtThis.value = i.image;
-   	currentSymbolString += i.image;
-   	
+   jjtThis.jjtSetValue( i.image); 	
  } #Term
 }

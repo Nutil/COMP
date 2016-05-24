@@ -34,6 +34,8 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants/*@egen*/{/*@
     parser.currentSymbolString = null;
     parser.symbolTable = new Hashtable< String, String >();
 	SimpleNode root = parser.S();
+
+	
 	Matrix.dfs(root,"");
 
   }}PARSER_END(Matrix)SKIP :{  " "| "\r"| "\t"}TOKEN : /* OPERATORS */{  < PLUS : "+" > | < MINUS : "-" >| < MULTIPLY : "*" >
@@ -92,7 +94,8 @@ SimpleNode S() : {/*@bgen(jjtree) S */
 
 void Expr()      :{Token i;}
 {
-  Input()
+   (    Input()< LF >
+  )+
   Output()
  }
 
@@ -101,45 +104,35 @@ void Input()        :{/*@bgen(jjtree) input */
                       boolean jjtc000 = true;
                       jjtree.openNodeScope(jjtn000);
 /*@egen*/Token i;}{/*@bgen(jjtree) input */
-  try {
+   try {
 /*@egen*/
-  (
    <INPUT> i=< SYMBOL >
-   {
-	symbolTable.put(i.image, "");
-	currentSymbol = i.image;
-	currentSymbolString = "";
-    
-	jjtn000.value = i.image;
+   {  
+	jjtn000.jjtSetValue( i.image);
     }
-     < DOUBLE_POINT > Array() ";"
-     {
-       symbolTable.put(currentSymbol, currentSymbolString);
-       currentSymbol=null;
-       currentSymbolString="";
+    < DOUBLE_POINT > Array() ";"/*@bgen(jjtree)*/
+   } catch (Throwable jjte000) {
+     if (jjtc000) {
+       jjtree.clearNodeScope(jjtn000);
+       jjtc000 = false;
+     } else {
+       jjtree.popNode();
      }
-    < LF >
-  )+/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-  }
-/*@egen*/}
+     if (jjte000 instanceof RuntimeException) {
+       throw (RuntimeException)jjte000;
+     }
+     if (jjte000 instanceof ParseException) {
+       throw (ParseException)jjte000;
+     }
+     throw (Error)jjte000;
+   } finally {
+     if (jjtc000) {
+       jjtree.closeNodeScope(jjtn000, true);
+     }
+   }
+/*@egen*/
+
+  }
 
 
 void Output()         :{/*@bgen(jjtree) output */
@@ -153,23 +146,10 @@ void Output()         :{/*@bgen(jjtree) output */
     (
   < OUTPUT > i=< SYMBOL >
    {
-   	if(symbolTable.get(i.image) != null) {
-   		System.err.println("Can't output to a variable you've already initialized!");
-   		return;
-   	}
-	symbolTable.put(i.image, "");
-	currentSymbol = i.image;
-	currentSymbolString = "";
-
-	jjtn000.value = i.image;
+	jjtn000.jjtSetValue(i.image);
 
 	}
     < DOUBLE_POINT > MathExpression() ";"
-     {
-       symbolTable.put(currentSymbol, currentSymbolString);
-       currentSymbol=null;
-       currentSymbolString="";
-     }
   )?/*@bgen(jjtree)*/
     } catch (Throwable jjte000) {
       if (jjtc000) {
@@ -194,36 +174,22 @@ void Output()         :{/*@bgen(jjtree) output */
 }
 
 void Array()     :{Token i;}{
-i=< BRACKET_LEFT >{
-  currentSymbolString += i.image;}
+< BRACKET_LEFT >
 Valores()
-i=< BRACKET_RIGHT >{
-  currentSymbolString += i.image;}  }
+< BRACKET_RIGHT > }
 void Valores()      :{}{
   (InnerArray())
-  {
-    currentSymbolString += ",";  }
   (","InnerArray())*}
 
 
 void InnerArray():{/*@bgen(jjtree) InnerArray */
-                   SimpleNode jjtn000 = new SimpleNode(JJTINNERARRAY);
-                   boolean jjtc000 = true;
-                   jjtree.openNodeScope(jjtn000);
-/*@egen*/Token i;}{/*@bgen(jjtree) InnerArray */
+  SimpleNode jjtn000 = new SimpleNode(JJTINNERARRAY);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
+/*@egen*/}{/*@bgen(jjtree) InnerArray */
    try {
-/*@egen*/   i=< BRACKET_LEFT >   {
-     currentSymbolString += i.image;   }    V()   {
-     currentSymbolString += ",";   }
-   (","V())*   i=< BRACKET_RIGHT >/*@bgen(jjtree)*/
-   {
-     jjtree.closeNodeScope(jjtn000, true);
-     jjtc000 = false;
-   }
-/*@egen*/
-   {
-     currentSymbolString += i.image;
-   }/*@bgen(jjtree)*/
+/*@egen*/   < BRACKET_LEFT >     Term()  
+   (","Term())*   < BRACKET_RIGHT >/*@bgen(jjtree)*/
    } catch (Throwable jjte000) {
      if (jjtc000) {
        jjtree.clearNodeScope(jjtn000);
@@ -243,33 +209,32 @@ void InnerArray():{/*@bgen(jjtree) InnerArray */
        jjtree.closeNodeScope(jjtn000, true);
      }
    }
-/*@egen*/ }
+/*@egen*/
+  }
 
-void V()     :{Token i;} 
-{
-  i=< DOUBLE >/*@bgen(jjtree) Term */
+void Term():{/*@bgen(jjtree) Term */
+             SimpleNode jjtn000 = new SimpleNode(JJTTERM);
+             boolean jjtc000 = true;
+             jjtree.openNodeScope(jjtn000);
+/*@egen*/Token i;} 
+{/*@bgen(jjtree) Term */
+  try {
+/*@egen*/
+  i=< DOUBLE >/*@bgen(jjtree)*/
               {
-                SimpleNode jjtn001 = new SimpleNode(JJTTERM);
-                boolean jjtc001 = true;
-                jjtree.openNodeScope(jjtn001);
-              }
-              try {
-/*@egen*//*@bgen(jjtree)*/
-              {
-                jjtree.closeNodeScope(jjtn001, true);
-                jjtc001 = false;
+                jjtree.closeNodeScope(jjtn000, true);
+                jjtc000 = false;
               }
 /*@egen*/{
-	jjtn001.value = Double.parseDouble(i.image);
-	currentSymbolString += i.image;
+	jjtn000.jjtSetValue(Double.parseDouble(i.image));
     }/*@bgen(jjtree)*/
-              } finally {
-                if (jjtc001) {
-                  jjtree.closeNodeScope(jjtn001, true);
-                }
-              }
-/*@egen*/     
- }
+  } finally {
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
+  }
+/*@egen*/
+ } 
 
 void MathExpression()      :{}{
 	(
@@ -278,12 +243,8 @@ void MathExpression()      :{}{
 
 void Priority1(int sign)      :{}{
  Priority2(sign)
- 
  (
- < PLUS >
- {
-   currentSymbolString += "+";
- }/*@bgen(jjtree) #Add( 2) */
+ < PLUS >/*@bgen(jjtree) #Add( 2) */
  {
    SimpleNode jjtn001 = new SimpleNode(JJTADD);
    boolean jjtc001 = true;
@@ -313,10 +274,7 @@ void Priority1(int sign)      :{}{
  }
 /*@egen*/        
  |
- < MINUS >
-  {
-   currentSymbolString += "-";
-  }/*@bgen(jjtree) #Sub( 2) */
+ < MINUS >/*@bgen(jjtree) #Sub( 2) */
  {
    SimpleNode jjtn002 = new SimpleNode(JJTSUB);
    boolean jjtc002 = true;
@@ -353,10 +311,7 @@ void Priority2(int sign)      : {} // 1: positive; -1: negative
 {
  Priority3(sign)
  (
-  < MULTIPLY >
-   {
-   currentSymbolString += "*";
-   }/*@bgen(jjtree) #Mul( 2) */
+  < MULTIPLY >/*@bgen(jjtree) #Mul( 2) */
  {
    SimpleNode jjtn001 = new SimpleNode(JJTMUL);
    boolean jjtc001 = true;
@@ -393,9 +348,6 @@ void Priority3(int sign)      : {} // 1: positive; -1: negative
  Priority4(sign)
  (
   < TRANSPOSE >
- {
-   currentSymbolString += "'";
- }
  )?
  (/*@bgen(jjtree) #Tra( 2) */
    {
@@ -432,14 +384,9 @@ void Priority3(int sign)      : {} // 1: positive; -1: negative
 void Priority4(int sign)      : {Token i;}
 {
  < PARENTHESIS_LEFT >
- {
-   currentSymbolString += "(";
- }
   Priority1(sign)
   < PARENTHESIS_RIGHT >
- {
-   currentSymbolString += ")";
- }
+
  | i=< SYMBOL >/*@bgen(jjtree) Term */
  {
    SimpleNode jjtn001 = new SimpleNode(JJTTERM);
@@ -454,14 +401,7 @@ void Priority4(int sign)      : {Token i;}
  }
 /*@egen*/
  {
-   	if(symbolTable.get(i.image) == null) {
-   		System.err.println("Uninitialized variable");
-   		return;
-   	}
-   	
-	jjtn001.value = i.image;
-   	currentSymbolString += i.image;
-   	
+   jjtn001.jjtSetValue( i.image); 	
  }/*@bgen(jjtree)*/
  } finally {
    if (jjtc001) {

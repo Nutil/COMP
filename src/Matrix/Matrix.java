@@ -31,6 +31,8 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     parser.currentSymbolString = null;
     parser.symbolTable = new Hashtable< String, String >();
         SimpleNode root = parser.S();
+
+
         Matrix.dfs(root,"");
 
   }
@@ -70,7 +72,19 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
 
   static final public void Expr() throws ParseException {
                    Token i;
-    Input();
+    label_1:
+    while (true) {
+      Input();
+      jj_consume_token(LF);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case INPUT:
+        ;
+        break;
+      default:
+        jj_la1[0] = jj_gen;
+        break label_1;
+      }
+    }
     Output();
   }
 
@@ -80,49 +94,30 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
                       boolean jjtc000 = true;
                       jjtree.openNodeScope(jjtn000);Token i;
     try {
-      label_1:
-      while (true) {
-        jj_consume_token(INPUT);
-        i = jj_consume_token(SYMBOL);
-        symbolTable.put(i.image, "");
-        currentSymbol = i.image;
-        currentSymbolString = "";
-
-        jjtn000.value = i.image;
-        jj_consume_token(DOUBLE_POINT);
-        Array();
-        jj_consume_token(22);
-       symbolTable.put(currentSymbol, currentSymbolString);
-       currentSymbol=null;
-       currentSymbolString="";
-        jj_consume_token(LF);
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case INPUT:
-          ;
-          break;
-        default:
-          jj_la1[0] = jj_gen;
-          break label_1;
-        }
-      }
+      jj_consume_token(INPUT);
+      i = jj_consume_token(SYMBOL);
+        jjtn000.jjtSetValue( i.image);
+      jj_consume_token(DOUBLE_POINT);
+      Array();
+      jj_consume_token(22);
     } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      {if (true) throw (RuntimeException)jjte000;}
-    }
-    if (jjte000 instanceof ParseException) {
-      {if (true) throw (ParseException)jjte000;}
-    }
-    {if (true) throw (Error)jjte000;}
+     if (jjtc000) {
+       jjtree.clearNodeScope(jjtn000);
+       jjtc000 = false;
+     } else {
+       jjtree.popNode();
+     }
+     if (jjte000 instanceof RuntimeException) {
+       {if (true) throw (RuntimeException)jjte000;}
+     }
+     if (jjte000 instanceof ParseException) {
+       {if (true) throw (ParseException)jjte000;}
+     }
+     {if (true) throw (Error)jjte000;}
     } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
+     if (jjtc000) {
+       jjtree.closeNodeScope(jjtn000, true);
+     }
     }
   }
 
@@ -136,21 +131,10 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
       case OUTPUT:
         jj_consume_token(OUTPUT);
         i = jj_consume_token(SYMBOL);
-        if(symbolTable.get(i.image) != null) {
-                System.err.println("Can't output to a variable you've already initialized!");
-                {if (true) return;}
-        }
-        symbolTable.put(i.image, "");
-        currentSymbol = i.image;
-        currentSymbolString = "";
-
-        jjtn000.value = i.image;
+        jjtn000.jjtSetValue(i.image);
         jj_consume_token(DOUBLE_POINT);
         MathExpression();
         jj_consume_token(22);
-       symbolTable.put(currentSymbol, currentSymbolString);
-       currentSymbol=null;
-       currentSymbolString="";
         break;
       default:
         jj_la1[1] = jj_gen;
@@ -179,16 +163,13 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
 
   static final public void Array() throws ParseException {
                    Token i;
-    i = jj_consume_token(BRACKET_LEFT);
-  currentSymbolString += i.image;
+    jj_consume_token(BRACKET_LEFT);
     Valores();
-    i = jj_consume_token(BRACKET_RIGHT);
-  currentSymbolString += i.image;
+    jj_consume_token(BRACKET_RIGHT);
   }
 
   static final public void Valores() throws ParseException {
     InnerArray();
-    currentSymbolString += ",";
     label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -206,14 +187,12 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
 
   static final public void InnerArray() throws ParseException {
                    /*@bgen(jjtree) InnerArray */
-                   SimpleNode jjtn000 = new SimpleNode(JJTINNERARRAY);
-                   boolean jjtc000 = true;
-                   jjtree.openNodeScope(jjtn000);Token i;
+  SimpleNode jjtn000 = new SimpleNode(JJTINNERARRAY);
+  boolean jjtc000 = true;
+  jjtree.openNodeScope(jjtn000);
     try {
-      i = jj_consume_token(BRACKET_LEFT);
-     currentSymbolString += i.image;
-      V();
-     currentSymbolString += ",";
+      jj_consume_token(BRACKET_LEFT);
+      Term();
       label_3:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -225,12 +204,9 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
           break label_3;
         }
         jj_consume_token(23);
-        V();
+        Term();
       }
-      i = jj_consume_token(BRACKET_RIGHT);
-     jjtree.closeNodeScope(jjtn000, true);
-     jjtc000 = false;
-     currentSymbolString += i.image;
+      jj_consume_token(BRACKET_RIGHT);
     } catch (Throwable jjte000) {
      if (jjtc000) {
        jjtree.clearNodeScope(jjtn000);
@@ -252,21 +228,20 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     }
   }
 
-  static final public void V() throws ParseException {
-               Token i;
-    i = jj_consume_token(DOUBLE);
-                SimpleNode jjtn001 = new SimpleNode(JJTTERM);
-                boolean jjtc001 = true;
-                jjtree.openNodeScope(jjtn001);
+  static final public void Term() throws ParseException {
+             /*@bgen(jjtree) Term */
+             SimpleNode jjtn000 = new SimpleNode(JJTTERM);
+             boolean jjtc000 = true;
+             jjtree.openNodeScope(jjtn000);Token i;
     try {
-                jjtree.closeNodeScope(jjtn001, true);
-                jjtc001 = false;
-        jjtn001.value = Double.parseDouble(i.image);
-        currentSymbolString += i.image;
+      i = jj_consume_token(DOUBLE);
+                jjtree.closeNodeScope(jjtn000, true);
+                jjtc000 = false;
+        jjtn000.jjtSetValue(Double.parseDouble(i.image));
     } finally {
-                if (jjtc001) {
-                  jjtree.closeNodeScope(jjtn001, true);
-                }
+    if (jjtc000) {
+      jjtree.closeNodeScope(jjtn000, true);
+    }
     }
   }
 
@@ -294,7 +269,6 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case PLUS:
         jj_consume_token(PLUS);
-   currentSymbolString += "+";
    SimpleNode jjtn001 = new SimpleNode(JJTADD);
    boolean jjtc001 = true;
    jjtree.openNodeScope(jjtn001);
@@ -322,7 +296,6 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
         break;
       case MINUS:
         jj_consume_token(MINUS);
-   currentSymbolString += "-";
    SimpleNode jjtn002 = new SimpleNode(JJTSUB);
    boolean jjtc002 = true;
    jjtree.openNodeScope(jjtn002);
@@ -365,7 +338,6 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case MULTIPLY:
       jj_consume_token(MULTIPLY);
-   currentSymbolString += "*";
    SimpleNode jjtn001 = new SimpleNode(JJTMUL);
    boolean jjtc001 = true;
    jjtree.openNodeScope(jjtn001);
@@ -402,7 +374,6 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case TRANSPOSE:
       jj_consume_token(TRANSPOSE);
-   currentSymbolString += "'";
       break;
     default:
       jj_la1[8] = jj_gen;
@@ -447,10 +418,8 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case PARENTHESIS_LEFT:
       jj_consume_token(PARENTHESIS_LEFT);
-   currentSymbolString += "(";
       Priority1(sign);
       jj_consume_token(PARENTHESIS_RIGHT);
-   currentSymbolString += ")";
       break;
     case SYMBOL:
       i = jj_consume_token(SYMBOL);
@@ -460,13 +429,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
       try {
    jjtree.closeNodeScope(jjtn001, true);
    jjtc001 = false;
-        if(symbolTable.get(i.image) == null) {
-                System.err.println("Uninitialized variable");
-                {if (true) return;}
-        }
-
-        jjtn001.value = i.image;
-        currentSymbolString += i.image;
+   jjtn001.jjtSetValue( i.image);
       } finally {
    if (jjtc001) {
      jjtree.closeNodeScope(jjtn001, true);
