@@ -54,17 +54,17 @@ public class Semantica {
 				
 			case "Add":
 				
-				verificaSePodeSomar(n.jjtGetChild(i));
+				verificaSePodeSomarSubtrair(n.jjtGetChild(i));
 				analise(n.jjtGetChild(i));
 				break;
 				
 			case "Sub":
-				verificaSePodeSubtrair(n.jjtGetChild(i));
+				
+				verificaSePodeSomarSubtrair(n.jjtGetChild(i));
 				analise(n.jjtGetChild(i));
 				break;
 				
 			case "Tra":
-
 				analise(n.jjtGetChild(i));
 				break;
 			}
@@ -75,60 +75,38 @@ public class Semantica {
 	}
 	
 	// SO FUNCIONA COM SOMA TERMO A TERMO, E NAO SOMA DIRETA DE MATRIZES
-	private static void verificaSePodeSomar(Node node) throws Exception{
+	private static void verificaSePodeSomarSubtrair(Node node) throws Exception{
 		
 		int largura=-1,altura=-1;
 		
 		for(int i = 0; i < node.jjtGetNumChildren(); i++) {
 		
-			double[][] array=symbolTable.get((String) ((SimpleNode) node.jjtGetChild(i)).jjtGetValue());
-			
-			if (array==null){
-				throw new Exception("variável de input - " +(String) ((SimpleNode) node.jjtGetChild(i)).jjtGetValue()+" nao foi declarada"); 
-			}
-			
-			if(largura==-1 && altura==-1){
-				largura=array[0].length;
-				altura=array.length;
-			}else if(largura!=array[0].length || altura!=array.length){
-				throw new Exception("variáveis a somar não têm tamanhos identicos"); 
+			String nomeNo=node.jjtGetChild(i).toString();
+			if(nomeNo=="Matrix"){
 				
+				double[][] array=symbolTable.get((String) ((SimpleNode) node.jjtGetChild(i)).jjtGetValue());
+				
+				
+				
+				if (array==null){
+					throw new Exception("variável de input - " +(String) ((SimpleNode) node.jjtGetChild(i)).jjtGetValue()+" nao foi declarada"); 
+				}
+				
+				if(largura==-1 && altura==-1){
+					largura=array[0].length;
+					altura=array.length;
+				}else if(largura!=array[0].length || altura!=array.length){
+					throw new Exception("variáveis a somar/subtrair não têm tamanhos identicos"); 
+					
+				}
 			}
-			
+			else{
+				System.out.println("A variavel a somar/subtrair depende de outra operação, ainda nao sei resolver este caso");
+			}	
 		}
-		
-		
-		
-		
 	}
 	
-private static void verificaSePodeSubtrair(Node node) throws Exception{
-		
-		int largura=-1,altura=-1;
-		
-		for(int i = 0; i < node.jjtGetNumChildren(); i++) {
-		
-			double[][] array=symbolTable.get((String) ((SimpleNode) node.jjtGetChild(i)).jjtGetValue());
-			
-			if (array==null){
-				throw new Exception("variável de input - " +(String) ((SimpleNode) node.jjtGetChild(i)).jjtGetValue()+" nao foi declarada"); 
-			}
-			
-			if(largura==-1 && altura==-1){
-				largura=array[0].length;
-				altura=array.length;
-			}else if(largura!=array[0].length || altura!=array.length){
-				throw new Exception("variáveis a subtrair não têm tamanhos identicos"); 
-				
-			}
-			
-		}
-		
-		
-		
-		
-	}
-	
+
 	
 	private static double[][] analisaTamanhoLinha(Node node) throws Exception{
 		
@@ -156,7 +134,7 @@ private static void verificaSePodeSubtrair(Node node) throws Exception{
 	}
 	
 	public static void printMap() {
-		System.out.println("PRINT DA SYMBOL TABLE");
+		System.out.println("\nPRINT DA SYMBOL TABLE\n");
 		for (Map.Entry<String, double[][]> entry : symbolTable.entrySet()) {
 		    String key = entry.getKey();
 		    double[][] value = entry.getValue();
@@ -166,13 +144,15 @@ private static void verificaSePodeSubtrair(Node node) throws Exception{
 		    int h=value[0].length;
 		    
 		    for(int z=0;z<i;z++){
+		        System.out.print("  | ");
 		        for(int d=0;d<h;d++){
-		            System.out.print("\t"+value[z][d]);
+		            System.out.print(value[z][d]+" ");
 			    }
-
+		        System.out.print("|");
 		    	System.out.println();
 		    }
-		    
+		    ;
+	    	System.out.println();
 		}
 	}
 }
