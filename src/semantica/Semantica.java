@@ -91,11 +91,23 @@ public class Semantica {
 	}
 	
 	public static void printMap() {
-		System.out.println("PRINT");
+		System.out.println("PRINT DA SYMBOL TABLE");
 		for (Map.Entry<String, double[][]> entry : symbolTable.entrySet()) {
 		    String key = entry.getKey();
-		    Object value = entry.getValue();
-		    System.out.println(key);
+		    double[][] value = entry.getValue();
+		    System.out.println(key + "-");
+		    
+		    int i=value.length;
+		    int h=value[0].length;
+		    
+		    for(int z=0;z<i;z++){
+		        for(int d=0;d<h;d++){
+		            System.out.print("\t"+value[z][d]);
+			    }
+
+		    	System.out.println();
+		    }
+		    
 		}
 	}
 }

@@ -11,29 +11,28 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
   public static String currentSymbolString;
   public static Hashtable<String, String> symbolTable;
 
-        public static void dfs(Node node, String prefix) {
+        public static void percorreGrafo(Node node, String prefix) {
 
                         SimpleNode n = (SimpleNode) node;
 
                         Object obj = n.jjtGetValue();
-                        System.out.println(prefix + n.toString() + "(" + obj + (obj != null? " - " + obj.getClass().getName(): "") + ")");
+                        System.out.println(prefix + n.toString() + "-" + obj);
 
                         for(int i = 0; i < n.jjtGetNumChildren(); i++) {
-                                dfs(n.jjtGetChild(i), prefix + "\u005ct");
+                                percorreGrafo(n.jjtGetChild(i), prefix + "\u005ct");
                         }
                 }
 
   public static void main(String args [])throws Exception
   {
     Matrix parser = new Matrix(System.in);
-    parser.currentSymbol = null;
-    parser.currentSymbolString = null;
-    parser.symbolTable = new Hashtable< String, String >();
         SimpleNode root = parser.S();
 
         Semantica.analise(root);
+
+        Matrix.percorreGrafo(root,"");
+
         Semantica.printMap();
-        Matrix.dfs(root,"");
 
   }
 
