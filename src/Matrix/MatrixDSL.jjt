@@ -13,15 +13,15 @@ public class Matrix{
   public static String currentSymbolString; 
   public static Hashtable<String, String> symbolTable;
 
-	public static void dfs(Node node, String prefix) {
+	public static void percorreGrafo(Node node, String prefix) {
 	
 		  	SimpleNode n = (SimpleNode) node; 
 	  	
 		  	Object obj = n.jjtGetValue();
-			System.out.println(prefix + n.toString() + "(" + obj + (obj != null? " - " + obj.getClass().getName(): "") + ")");
+			System.out.println(prefix + n.toString() + "-" + obj);
 	
 			for(int i = 0; i < n.jjtGetNumChildren(); i++) {
-				dfs(n.jjtGetChild(i), prefix + "\t");
+				percorreGrafo(n.jjtGetChild(i), prefix + "   ");
 			}
 		}
 	    public static void main(String args [])throws Exception  {    Matrix parser = new Matrix(System.in);
@@ -31,7 +31,7 @@ public class Matrix{
 	SimpleNode root = parser.S();
 
 	Semantica.analise(root);
-	Matrix.dfs(root,"");
+	Matrix.percorreGrafo(root,"");
 
   }}PARSER_END(Matrix)SKIP :{  " "| "\r"| "\t"}TOKEN : /* OPERATORS */{  < PLUS : "+" > | < MINUS : "-" >| < MULTIPLY : "*" >
 | < TRANSPOSE: "'" >| < EQUALS: "=" >

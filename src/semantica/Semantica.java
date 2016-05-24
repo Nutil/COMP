@@ -9,23 +9,26 @@ public class Semantica {
 		
 	 	SimpleNode n = (SimpleNode) node; 
 		
-	 	Object obj = n.jjtGetValue();
-
 		for(int i = 0; i < n.jjtGetNumChildren(); i++) {
 			
 			switch(n.jjtGetChild(i).toString()){
 			case "input":
 				analisaTamanhoLinha(n.jjtGetChild(i));
-				analise(n.jjtGetChild(i));
+				analise(n.jjtGetChild(i));			
+				
 				break;
+				
 			case "output":
 				break;
+				
 			case "InnerArray":
 				analise(n.jjtGetChild(i));
 				break;
+				
 			case "Term":
 				SimpleNode filho= (SimpleNode)  n.jjtGetChild(i);
 				Object objeto = filho.jjtGetValue();
+				
 				if (!(objeto instanceof Double)){
 					throw new Exception("Não é double"); 
 				}
@@ -62,6 +65,7 @@ public class Semantica {
 		for(int i = 0; i < node.jjtGetNumChildren(); i++) {
 			
 			int tamanho=node.jjtGetChild(i).jjtGetNumChildren();
+			
 			if(tamanhoLinha==-1){
 				tamanhoLinha=tamanho;
 			}
