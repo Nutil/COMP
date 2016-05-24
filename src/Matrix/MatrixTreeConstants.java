@@ -7,14 +7,12 @@ public interface MatrixTreeConstants
   public int JJTVOID = 1;
   public int JJTINPUT = 2;
   public int JJTOUTPUT = 3;
-  public int JJTVALORES = 4;
-  public int JJTINNERARRAY = 5;
-  public int JJTTERM = 6;
-  public int JJTMATHEXPRESSION = 7;
-  public int JJTADD = 8;
-  public int JJTSUB = 9;
-  public int JJTMUL = 10;
-  public int JJTTRA = 11;
+  public int JJTINNERARRAY = 4;
+  public int JJTTERM = 5;
+  public int JJTADD = 6;
+  public int JJTSUB = 7;
+  public int JJTMUL = 8;
+  public int JJTTRA = 9;
 
 
   public String[] jjtNodeName = {
@@ -22,14 +20,12 @@ public interface MatrixTreeConstants
     "void",
     "input",
     "output",
-    "Valores",
     "InnerArray",
     "Term",
-    "MathExpression",
     "Add",
     "Sub",
     "Mul",
     "Tra",
   };
 }
-/* JavaCC - OriginalChecksum=27c4a79329d8f3bd295f02e2f6ad19f0 (do not edit this line) */
+/* JavaCC - OriginalChecksum=ae71a9134ce19d9263a90361301b22c0 (do not edit this line) */

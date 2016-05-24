@@ -13,13 +13,25 @@ public class Matrix{
   public static String currentSymbol;
   public static String currentSymbolString; 
   public static Hashtable<String, String> symbolTable;
-    public static void main(String args []) throws ParseException  {    Matrix parser = new Matrix(System.in);
+
+	public static void dfs(Node node, String prefix) {
+	
+		  	SimpleNode n = (SimpleNode) node; 
+	
+		  	Object obj = n.jjtGetValue();
+			System.out.println(prefix + n.toString() + "(" + obj + (obj != null? " - " + obj.getClass().getName(): "") + ")");
+	
+			for(int i = 0; i < n.jjtGetNumChildren(); i++) {
+				dfs(n.jjtGetChild(i), prefix + "\t");
+			}
+		}
+	    public static void main(String args []) throws ParseException  {    Matrix parser = new Matrix(System.in);
     parser.currentSymbol = null;
     parser.currentSymbolString = null;
     parser.symbolTable = new Hashtable< String, String >();
 	SimpleNode root = parser.S();
-	root.dump("");
-	
+	Matrix.dfs(root,"");
+
   }}PARSER_END(Matrix)SKIP :{  " "| "\r"| "\t"}TOKEN : /* OPERATORS */{  < PLUS : "+" > | < MINUS : "-" >| < MULTIPLY : "*" >
 | < TRANSPOSE: "'" >| < EQUALS: "=" >
 | < DOUBLE_POINT : ":" >
@@ -57,7 +69,7 @@ void Input() #input :{Token i;}{
 	currentSymbol = i.image;
 	currentSymbolString = "";
     
-	jjtThis.val = i.image;
+	jjtThis.value = i.image;
     }
      < DOUBLE_POINT > Array() ";"
      {
@@ -82,7 +94,7 @@ void Output()  #output:{Token i;}
 	currentSymbol = i.image;
 	currentSymbolString = "";
 
-	jjtThis.val = i.image;
+	jjtThis.value = i.image;
 
 	}
     < DOUBLE_POINT > MathExpression() ";"
@@ -100,7 +112,7 @@ i=< BRACKET_LEFT >{
 Valores()
 i=< BRACKET_RIGHT >{
   currentSymbolString += i.image;}  }
-void Valores() :{}{
+void Valores() #void:{}{
   (InnerArray())
   {
     currentSymbolString += ",";  }
@@ -118,12 +130,12 @@ void InnerArray():{Token i;}{   i=< BRACKET_LEFT >   {
 void V()#void:{Token i;} 
 {
   i=< DOUBLE >{
-	jjtThis.val = i.image;
+	jjtThis.value = Double.parseDouble(i.image);
 	currentSymbolString += i.image;
     }#Term
  }
 
-void MathExpression() :{}{
+void MathExpression() #void:{}{
 	(
     	Priority1(1)
 	)+}
@@ -191,7 +203,7 @@ void Priority4(int sign) #void: {Token i;}
    		return;
    	}
    	
-
+	jjtThis.value = i.image;
    	currentSymbolString += i.image;
    	
  } #Term

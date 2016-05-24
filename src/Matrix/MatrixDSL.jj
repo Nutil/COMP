@@ -17,13 +17,25 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants/*@egen*/{/*@
   public static String currentSymbol;
   public static String currentSymbolString; 
   public static Hashtable<String, String> symbolTable;
-    public static void main(String args []) throws ParseException  {    Matrix parser = new Matrix(System.in);
+
+	public static void dfs(Node node, String prefix) {
+	
+		  	SimpleNode n = (SimpleNode) node; 
+	
+		  	Object obj = n.jjtGetValue();
+			System.out.println(prefix + n.toString() + "(" + obj + (obj != null? " - " + obj.getClass().getName(): "") + ")");
+	
+			for(int i = 0; i < n.jjtGetNumChildren(); i++) {
+				dfs(n.jjtGetChild(i), prefix + "\t");
+			}
+		}
+	    public static void main(String args []) throws ParseException  {    Matrix parser = new Matrix(System.in);
     parser.currentSymbol = null;
     parser.currentSymbolString = null;
     parser.symbolTable = new Hashtable< String, String >();
 	SimpleNode root = parser.S();
-	root.dump("");
-	
+	Matrix.dfs(root,"");
+
   }}PARSER_END(Matrix)SKIP :{  " "| "\r"| "\t"}TOKEN : /* OPERATORS */{  < PLUS : "+" > | < MINUS : "-" >| < MULTIPLY : "*" >
 | < TRANSPOSE: "'" >| < EQUALS: "=" >
 | < DOUBLE_POINT : ":" >
@@ -98,7 +110,7 @@ void Input()        :{/*@bgen(jjtree) input */
 	currentSymbol = i.image;
 	currentSymbolString = "";
     
-	jjtn000.val = i.image;
+	jjtn000.value = i.image;
     }
      < DOUBLE_POINT > Array() ";"
      {
@@ -149,7 +161,7 @@ void Output()         :{/*@bgen(jjtree) output */
 	currentSymbol = i.image;
 	currentSymbolString = "";
 
-	jjtn000.val = i.image;
+	jjtn000.value = i.image;
 
 	}
     < DOUBLE_POINT > MathExpression() ";"
@@ -187,37 +199,11 @@ i=< BRACKET_LEFT >{
 Valores()
 i=< BRACKET_RIGHT >{
   currentSymbolString += i.image;}  }
-void Valores() :{/*@bgen(jjtree) Valores */
-  SimpleNode jjtn000 = new SimpleNode(JJTVALORES);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}{/*@bgen(jjtree) Valores */
-  try {
-/*@egen*/
+void Valores()      :{}{
   (InnerArray())
   {
     currentSymbolString += ",";  }
-  (","InnerArray())*/*@bgen(jjtree)*/
-  } catch (Throwable jjte000) {
-    if (jjtc000) {
-      jjtree.clearNodeScope(jjtn000);
-      jjtc000 = false;
-    } else {
-      jjtree.popNode();
-    }
-    if (jjte000 instanceof RuntimeException) {
-      throw (RuntimeException)jjte000;
-    }
-    if (jjte000 instanceof ParseException) {
-      throw (ParseException)jjte000;
-    }
-    throw (Error)jjte000;
-  } finally {
-    if (jjtc000) {
-      jjtree.closeNodeScope(jjtn000, true);
-    }
-  }
-/*@egen*/}
+  (","InnerArray())*}
 
 
 void InnerArray():{/*@bgen(jjtree) InnerArray */
@@ -274,7 +260,7 @@ void V()     :{Token i;}
                 jjtc001 = false;
               }
 /*@egen*/{
-	jjtn001.val = i.image;
+	jjtn001.value = Double.parseDouble(i.image);
 	currentSymbolString += i.image;
     }/*@bgen(jjtree)*/
               } finally {
@@ -285,36 +271,10 @@ void V()     :{Token i;}
 /*@egen*/     
  }
 
-void MathExpression() :{/*@bgen(jjtree) MathExpression */
-  SimpleNode jjtn000 = new SimpleNode(JJTMATHEXPRESSION);
-  boolean jjtc000 = true;
-  jjtree.openNodeScope(jjtn000);
-/*@egen*/}{/*@bgen(jjtree) MathExpression */
-        try {
-/*@egen*/
+void MathExpression()      :{}{
 	(
     	Priority1(1)
-	)+/*@bgen(jjtree)*/
-        } catch (Throwable jjte000) {
-          if (jjtc000) {
-            jjtree.clearNodeScope(jjtn000);
-            jjtc000 = false;
-          } else {
-            jjtree.popNode();
-          }
-          if (jjte000 instanceof RuntimeException) {
-            throw (RuntimeException)jjte000;
-          }
-          if (jjte000 instanceof ParseException) {
-            throw (ParseException)jjte000;
-          }
-          throw (Error)jjte000;
-        } finally {
-          if (jjtc000) {
-            jjtree.closeNodeScope(jjtn000, true);
-          }
-        }
-/*@egen*/}
+	)+}
 
 void Priority1(int sign)      :{}{
  Priority2(sign)
@@ -499,7 +459,7 @@ void Priority4(int sign)      : {Token i;}
    		return;
    	}
    	
-
+	jjtn001.value = i.image;
    	currentSymbolString += i.image;
    	
  }/*@bgen(jjtree)*/
