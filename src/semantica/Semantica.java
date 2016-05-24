@@ -1,21 +1,29 @@
 package semantica;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import Matrix.Node;
 import Matrix.SimpleNode;
 
 public class Semantica {
 
+	private static HashMap<String, double[][]> symbolTable= new HashMap<>();;
+	
 	public static void analise(Node node) throws Exception{
-		
 	 	SimpleNode n = (SimpleNode) node; 
 		
 		for(int i = 0; i < n.jjtGetNumChildren(); i++) {
 			
 			switch(n.jjtGetChild(i).toString()){
 			case "input":
-				analisaTamanhoLinha(n.jjtGetChild(i));
-				analise(n.jjtGetChild(i));			
-				
+				if(symbolTable.get((String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue())!=null)
+					throw new Exception("variável de input já declarada"); 
+				double [][] matrix = analisaTamanhoLinha(n.jjtGetChild(i));
+				symbolTable.put((String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue(), matrix);
+				analise(n.jjtGetChild(i));
 				break;
 				
 			case "output":
@@ -39,7 +47,6 @@ public class Semantica {
 				break;
 
 			case "Mul":
-				
 				break;
 				
 			case "Add":
@@ -58,9 +65,10 @@ public class Semantica {
 		
 	}
 	
-	public static void analisaTamanhoLinha(Node node) throws Exception{
+	public static double[][] analisaTamanhoLinha(Node node) throws Exception{
 		
 		int tamanhoLinha=-1;
+		double [][] matrix;
 		
 		for(int i = 0; i < node.jjtGetNumChildren(); i++) {
 			
@@ -72,9 +80,22 @@ public class Semantica {
 			else if(tamanhoLinha!=tamanho){
 				throw new Exception("Tamanho das linhas da matriz não é igual"); 
 			}
-			
 		}
+		
+		matrix=new double[node.jjtGetNumChildren()][tamanhoLinha];
+		for(int i = 0; i < node.jjtGetNumChildren(); i++)
+			for(int j=0; j < tamanhoLinha; j++)
+				matrix[i][j] = (double) ((SimpleNode) node.jjtGetChild(i).jjtGetChild(j)).jjtGetValue();
+		
+		return matrix;
 	}
 	
-	
+	public static void printMap() {
+		System.out.println("PRINT");
+		for (Map.Entry<String, double[][]> entry : symbolTable.entrySet()) {
+		    String key = entry.getKey();
+		    Object value = entry.getValue();
+		    System.out.println(key);
+		}
+	}
 }
