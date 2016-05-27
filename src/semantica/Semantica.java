@@ -16,27 +16,26 @@ public class Semantica {
 	 	SimpleNode n = (SimpleNode) node; 
 		
 		for(int i = 0; i < n.jjtGetNumChildren(); i++) {
-			
-			switch(n.jjtGetChild(i).toString()){
+			SimpleNode iChild = (SimpleNode) n.jjtGetChild(i);
+			switch(iChild.toString()){
 			case "input":
-				if(symbolTable.get((String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue())!=null)
+				if(symbolTable.get((String) iChild.jjtGetValue())!=null)
 					throw new Exception("variável de input já declarada"); 
-				double [][] matrix = analisaTamanhoLinha(n.jjtGetChild(i));
-				symbolTable.put((String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue(), matrix);
-				analise(n.jjtGetChild(i));
+				double [][] matrix = analisaTamanhoLinha(iChild);
+				symbolTable.put((String) iChild.jjtGetValue(), matrix);
+				analise(iChild);
 				break;
 				
 			case "output":
-				analise(n.jjtGetChild(i));
+				analise(iChild);
 				break;
 				
 			case "InnerArray":
-				analise(n.jjtGetChild(i));
+				analise(iChild);
 				break;
 				
 			case "Term":
-				SimpleNode filho= (SimpleNode)  n.jjtGetChild(i);
-				Object objeto = filho.jjtGetValue();
+				Object objeto = iChild.jjtGetValue();
 				
 				if (!(objeto instanceof Double)){
 					throw new Exception("Não é double"); 
@@ -44,28 +43,28 @@ public class Semantica {
 				break;
 				
 			case "Matrix":
-				if(symbolTable.get((String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue())==null)
-					throw new Exception("variável de input - " +(String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue()+" nao foi declarada"); 
+				if(symbolTable.get((String) iChild.jjtGetValue())==null)
+					throw new Exception("variável de input - " +(String) iChild.jjtGetValue()+" nao foi declarada"); 
 				break;
 
 			case "Mul":
-				analise(n.jjtGetChild(i));
+				analise(iChild);
 				break;
 				
 			case "Add":
 				
-				verificaSePodeSomarSubtrair(n.jjtGetChild(i));
-				analise(n.jjtGetChild(i));
+				verificaSePodeSomarSubtrair(iChild);
+				analise(iChild);
 				break;
 				
 			case "Sub":
 				
-				verificaSePodeSomarSubtrair(n.jjtGetChild(i));
-				analise(n.jjtGetChild(i));
+				verificaSePodeSomarSubtrair(iChild);
+				analise(iChild);
 				break;
 				
 			case "Tra":
-				analise(n.jjtGetChild(i));
+				analise(iChild);
 				break;
 			}
 			
