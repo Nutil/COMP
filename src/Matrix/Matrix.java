@@ -4,6 +4,9 @@ package Matrix;
 
 import java.util.Hashtable;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import semantica.Semantica;
 
 public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConstants {/*@bgen(jjtree)*/
@@ -28,11 +31,15 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     Matrix parser = new Matrix(System.in);
         SimpleNode root = parser.S();
 
-        Semantica.analise(root);
+        Semantica semantica= new Semantica();
+        semantica.analise(root);
+        semantica.printMap();
+        semantica.outputFile.close();
+        Files.move(semantica.tempFilePath, (new File("matrix.java")).toPath(), StandardCopyOption.ATOMIC_MOVE);
 
         Matrix.percorreGrafo(root,"");
 
-        Semantica.printMap();
+
 
   }
 
