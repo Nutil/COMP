@@ -3,11 +3,13 @@ package Matrix;
 
 
 import java.util.Hashtable;
+import java.util.HashMap;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import semantica.Semantica;
+import codeGeneration.CodeGenerator;
 
 public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConstants {/*@bgen(jjtree)*/
   protected static JJTMatrixState jjtree = new JJTMatrixState();public static String currentSymbol;
@@ -33,9 +35,13 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
 
         Semantica semantica= new Semantica();
         semantica.analise(root);
-        semantica.printMap();
-        semantica.outputFile.close();
-        Files.move(semantica.tempFilePath, (new File("matrix.java")).toPath(), StandardCopyOption.ATOMIC_MOVE);
+        HashMap<String, double[][]> finalTable = semantica.getSymbolTable();
+
+        CodeGenerator generator = new CodeGenerator(finalTable);
+        generator.printMap();
+        generator.closeOutput();
+
+        Files.move(generator.getTempFilePath(), (new File("matrix.java")).toPath(), StandardCopyOption.ATOMIC_MOVE);
 
         Matrix.percorreGrafo(root,"");
 
