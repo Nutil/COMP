@@ -1,5 +1,11 @@
 package semantica;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -10,32 +16,48 @@ import Matrix.SimpleNode;
 
 public class Semantica {
 
-	private static HashMap<String, double[][]> symbolTable= new HashMap<>();;
+	private static HashMap<String, double[][]> symbolTable= new HashMap<>();
+	public PrintWriter outputFile;
+	public Path tempFilePath;
 	
-	public static void analise(Node node) throws Exception{
+	
+	
+
+	public Semantica() throws IOException {
+		this.tempFilePath = Files.createTempFile("Matrix", null);
+		this.outputFile =  new PrintWriter(new FileOutputStream(tempFilePath.toFile()), true);
+	}
+
+	public  void analise(Node node) throws Exception{
+
+		
+		
+		
 	 	SimpleNode n = (SimpleNode) node; 
 		
 		for(int i = 0; i < n.jjtGetNumChildren(); i++) {
-			SimpleNode iChild = (SimpleNode) n.jjtGetChild(i);
-			switch(iChild.toString()){
+			
+			switch(n.jjtGetChild(i).toString()){
 			case "input":
-				if(symbolTable.get((String) iChild.jjtGetValue())!=null)
+				if(symbolTable.get((String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue())!=null)
 					throw new Exception("variável de input já declarada"); 
-				double [][] matrix = analisaTamanhoLinha(iChild);
-				symbolTable.put((String) iChild.jjtGetValue(), matrix);
-				analise(iChild);
+				double [][] matrix = analisaTamanhoLinha(n.jjtGetChild(i));
+				symbolTable.put((String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue(), matrix);
+
+				analise(n.jjtGetChild(i));
 				break;
 				
 			case "output":
-				analise(iChild);
+				analise(n.jjtGetChild(i));
 				break;
 				
 			case "InnerArray":
-				analise(iChild);
+				analise(n.jjtGetChild(i));
 				break;
 				
 			case "Term":
-				Object objeto = iChild.jjtGetValue();
+				SimpleNode filho= (SimpleNode)  n.jjtGetChild(i);
+				Object objeto = filho.jjtGetValue();
 				
 				if (!(objeto instanceof Double)){
 					throw new Exception("Não é double"); 
@@ -43,28 +65,28 @@ public class Semantica {
 				break;
 				
 			case "Matrix":
-				if(symbolTable.get((String) iChild.jjtGetValue())==null)
-					throw new Exception("variável de input - " +(String) iChild.jjtGetValue()+" nao foi declarada"); 
+				if(symbolTable.get((String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue())==null)
+					throw new Exception("variável de input - " +(String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue()+" nao foi declarada"); 
 				break;
 
 			case "Mul":
-				analise(iChild);
+				analise(n.jjtGetChild(i));
 				break;
 				
 			case "Add":
 				
-				verificaSePodeSomarSubtrair(iChild);
-				analise(iChild);
+				verificaSePodeSomarSubtrair(n.jjtGetChild(i));
+				analise(n.jjtGetChild(i));
 				break;
 				
 			case "Sub":
 				
-				verificaSePodeSomarSubtrair(iChild);
-				analise(iChild);
+				verificaSePodeSomarSubtrair(n.jjtGetChild(i));
+				analise(n.jjtGetChild(i));
 				break;
 				
 			case "Tra":
-				analise(iChild);
+				analise(n.jjtGetChild(i));
 				break;
 			}
 			
@@ -132,25 +154,44 @@ public class Semantica {
 		return matrix;
 	}
 	
-	public static void printMap() {
+	public  void printMap() {
 		System.out.println("\nPRINT DA SYMBOL TABLE\n");
 		for (Map.Entry<String, double[][]> entry : symbolTable.entrySet()) {
 		    String key = entry.getKey();
 		    double[][] value = entry.getValue();
 		    System.out.println(key + "-");
+		    this.outputFile.write("double[][]"+key+"= [");
 		    
 		    int i=value.length;
 		    int h=value[0].length;
 		    
 		    for(int z=0;z<i;z++){
 		        System.out.print("  | ");
+		        this.outputFile.write("[");
+				this.outputFile.flush();
 		        for(int d=0;d<h;d++){
 		            System.out.print(value[z][d]+" ");
+		            this.outputFile.write(value[z][d]+"");
+		    		this.outputFile.flush();
+		            if(d!=(h-1)){
+		            	this.outputFile.write(",");
+		        		this.outputFile.flush();
+		            }
 			    }
+		        this.outputFile.write("]");
+		        
+		        if(z!=(i-1)){
+	            	this.outputFile.write(",");
+	        		this.outputFile.flush();
+	            }
+
+				this.outputFile.flush();
 		        System.out.print("|");
 		    	System.out.println();
 		    }
-		    ;
+		     this.outputFile.write("];\n");
+						this.outputFile.flush();
+		
 	    	System.out.println();
 		}
 	}
