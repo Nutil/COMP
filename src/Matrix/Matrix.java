@@ -38,7 +38,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
         HashMap<String, double[][]> inputTable = semantica.getInputTable();
 
         percorreGrafo(root, ": ");
-        CodeGenerator generator = new CodeGenerator(inputTable);
+        CodeGenerator generator = new CodeGenerator(inputTable,root,semantica.getOutputName());
         generator.generate();
         generator.closeOutput();
 

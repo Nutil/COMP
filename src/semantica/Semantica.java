@@ -1,15 +1,8 @@
 package semantica;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
+
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
+
 
 import Matrix.Node;
 import Matrix.SimpleNode;
@@ -17,6 +10,11 @@ import Matrix.SimpleNode;
 public class Semantica {
 
 	private static HashMap<String, double[][]> inputTable= new HashMap<>();
+	private String outputName;
+
+	public String getOutputName() {
+		return outputName;
+	}
 
 	public Semantica() {}
 
@@ -37,6 +35,7 @@ public class Semantica {
 				break;
 				
 			case "output":
+				outputName=(String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue();
 				analise(n.jjtGetChild(i));
 				break;
 				
