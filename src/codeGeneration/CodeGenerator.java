@@ -19,7 +19,7 @@ public class CodeGenerator {
 	public CodeGenerator(HashMap<String, double[][]> symbolTable) throws IOException {
 		this.inputTable = symbolTable;
 		this.generatedFile = new File("Matrix.java");
-		this.outputFile =  new PrintWriter(new FileOutputStream(generatedFile, true));
+		this.outputFile =  new PrintWriter(generatedFile);
 	}
 	
 	
