@@ -36,6 +36,7 @@ public class Matrix{
 	semantica.analise(root);
 	HashMap<String, double[][]> inputTable = semantica.getInputTable();
 
+	percorreGrafo(root, ": ");
 	CodeGenerator generator = new CodeGenerator(inputTable);
 	generator.generate();
 	generator.closeOutput();
