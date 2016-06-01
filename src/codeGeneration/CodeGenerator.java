@@ -89,6 +89,32 @@ public class CodeGenerator {
 		
 	}
 	
+public String writeTransTofile(String Matrix1) throws Exception{
+		
+		int numeroLinhas1= inputTable.get(Matrix1).length;
+		int numeroColunas1= inputTable.get(Matrix1)[0].length;
+
+
+		String newMatrixName= Matrix1+"trans";
+		
+		this.outputFile.write("\n\t\tdouble[][] "+ newMatrixName+" = new double["+numeroColunas1+"]["+numeroLinhas1+"];\n\n");
+		
+		this.outputFile.write("\t\tfor(int i = 0; i < "+numeroLinhas1+"; i++) {\n"
+				+ "\t\t\tfor(int j = 0; j < "+numeroColunas1+"; j++) {\n"
+				+ "\t\t\t\t\t"+newMatrixName+"[j][i] = "+Matrix1+"[i][j];\n"
+				+ "\t\t\t}\n"
+				+ "\t\t}\n");
+		
+		
+		inputTable.put(newMatrixName,new double[numeroColunas1][numeroLinhas1] );
+		
+		
+		return newMatrixName;
+		
+		 
+		
+	}
+	
 public String writeMulTofile(String Matrix1,String Matrix2) throws Exception{
 		
 		int numeroLinhas1= inputTable.get(Matrix1).length;
@@ -229,8 +255,19 @@ public  String  analise(Node node) throws Exception{
 			break;
 			
 		case "Tra":
-			analise(n.jjtGetChild(i));
-			break;
+			
+			if(n.jjtGetChild(i).jjtGetChild(0).toString()!="Matrix"){
+				
+				matrixGerada1=analise(n.jjtGetChild(i));
+		
+			}
+		
+			if(matrixGerada1==null )
+				return writeTransTofile((String) ((SimpleNode) (node.jjtGetChild(i)).jjtGetChild(0)).jjtGetValue());
+			
+			else if(matrixGerada1!=null)
+				return writeTransTofile(matrixGerada1);
+		
 		}
 		
 		
