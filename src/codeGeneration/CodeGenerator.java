@@ -1,5 +1,6 @@
 package codeGeneration;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,14 +12,14 @@ import java.util.Map;
 public class CodeGenerator {
 	
 	private PrintWriter outputFile;
-	private Path tempFilePath;
+	private File generatedFile;
 	
 	private HashMap<String, double[][]> inputTable;
 	
 	public CodeGenerator(HashMap<String, double[][]> symbolTable) throws IOException {
 		this.inputTable = symbolTable;
-		this.tempFilePath = Files.createTempFile("Matrix", null);
-		this.outputFile =  new PrintWriter(new FileOutputStream(tempFilePath.toFile()), true);
+		this.generatedFile = new File("Matrix.java");
+		this.outputFile =  new PrintWriter(new FileOutputStream(generatedFile, true));
 	}
 	
 	
@@ -58,7 +59,6 @@ public class CodeGenerator {
 	}
 	
 	public void generate() {
-		
 		 this.outputFile.write("public class matrix{\n\n");
 		
 		 this.outputFile.write("\tpublic void calcula(){\n\n");
@@ -73,7 +73,7 @@ public class CodeGenerator {
 		return;
 	}
 	
-	public Path getTempFilePath() {
-		return tempFilePath;
+	public File getGeneratedFile() {
+		return generatedFile;
 	}
 }

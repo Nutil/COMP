@@ -39,8 +39,10 @@ public class Matrix{
 	CodeGenerator generator = new CodeGenerator(inputTable);
 	generator.generate();
 	generator.closeOutput();
+
+	//File matrixFile = new File("matrix.java");
 	
-	Files.move(generator.getTempFilePath(), (new File("matrix.java")).toPath(), StandardCopyOption.ATOMIC_MOVE);
+	//Files.move(generator.getGeneratedFile().getPath(), (new File("matrix.java")).toPath(), StandardCopyOption.ATOMIC_MOVE);
 	System.out.println("Ficheiro criado\n");
 
 	

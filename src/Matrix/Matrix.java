@@ -41,7 +41,9 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
         generator.generate();
         generator.closeOutput();
 
-        Files.move(generator.getTempFilePath(), (new File("matrix.java")).toPath(), StandardCopyOption.ATOMIC_MOVE);
+        //File matrixFile = new File("matrix.java");
+
+        //Files.move(generator.getGeneratedFile().getPath(), (new File("matrix.java")).toPath(), StandardCopyOption.ATOMIC_MOVE);
         System.out.println("Ficheiro criado\u005cn");
 
 
