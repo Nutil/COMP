@@ -35,15 +35,14 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
 
         Semantica semantica= new Semantica();
         semantica.analise(root);
-        HashMap<String, double[][]> finalTable = semantica.getSymbolTable();
+        HashMap<String, double[][]> inputTable = semantica.getInputTable();
 
-        CodeGenerator generator = new CodeGenerator(finalTable);
-        generator.printMap();
+        CodeGenerator generator = new CodeGenerator(inputTable);
+        generator.generate();
         generator.closeOutput();
 
         Files.move(generator.getTempFilePath(), (new File("matrix.java")).toPath(), StandardCopyOption.ATOMIC_MOVE);
-
-        Matrix.percorreGrafo(root,"");
+        System.out.println("Ficheiro criado\u005cn");
 
 
 
