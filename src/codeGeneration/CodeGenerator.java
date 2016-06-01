@@ -70,6 +70,9 @@ public void writeMulTofile(String Matrix1,String Matrix2) throws Exception{
 		
 		int numeroColunas2= inputTable.get(Matrix2)[0].length;
 		
+		System.out.println("nC: " + numeroColunas1);
+		System.out.println("nL: " + numeroLinhas2);
+		
 		if(numeroColunas1 != numeroLinhas2) throw new Exception("Impossivel multiplicar estas matrizes");
 
 		String newMatrixName= Matrix1+"mul"+Matrix2;
@@ -132,7 +135,7 @@ public void writeMulTofile(String Matrix1,String Matrix2) throws Exception{
 		 initiateVariables();
 		 
 		 //HARCODED
-		 writeMulTofile("A","B");
+		 writeMulTofile("B","A");
 		 
 		 this.outputFile.write("\n\t}\n}");
 	}
