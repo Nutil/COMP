@@ -16,7 +16,7 @@ import Matrix.SimpleNode;
 
 public class Semantica {
 
-	private static HashMap<String, double[][]> symbolTable= new HashMap<>();
+	private static HashMap<String, double[][]> inputTable= new HashMap<>();
 
 	public Semantica() {}
 
@@ -28,10 +28,10 @@ public class Semantica {
 			
 			switch(n.jjtGetChild(i).toString()){
 			case "input":
-				if(symbolTable.get((String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue())!=null)
+				if(inputTable.get((String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue())!=null)
 					throw new Exception("variável de input já declarada"); 
 				double [][] matrix = analisaTamanhoLinha(n.jjtGetChild(i));
-				symbolTable.put((String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue(), matrix);
+				inputTable.put((String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue(), matrix);
 
 				analise(n.jjtGetChild(i));
 				break;
@@ -54,7 +54,7 @@ public class Semantica {
 				break;
 				
 			case "Matrix":
-				if(symbolTable.get((String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue())==null)
+				if(inputTable.get((String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue())==null)
 					throw new Exception("variável de input - " +(String) ((SimpleNode) n.jjtGetChild(i)).jjtGetValue()+" nao foi declarada"); 
 				break;
 
@@ -94,7 +94,7 @@ public class Semantica {
 			String nomeNo=node.jjtGetChild(i).toString();
 			if(nomeNo=="Matrix"){
 				
-				double[][] array=symbolTable.get((String) ((SimpleNode) node.jjtGetChild(i)).jjtGetValue());
+				double[][] array=inputTable.get((String) ((SimpleNode) node.jjtGetChild(i)).jjtGetValue());
 				
 				
 				
@@ -143,7 +143,7 @@ public class Semantica {
 		return matrix;
 	}
 	
-	public HashMap<String, double[][]> getSymbolTable() {
-		return symbolTable;
+	public HashMap<String, double[][]> getInputTable() {
+		return inputTable;
 	}
 }

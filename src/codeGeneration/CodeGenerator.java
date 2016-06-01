@@ -13,31 +13,28 @@ public class CodeGenerator {
 	private PrintWriter outputFile;
 	private Path tempFilePath;
 	
-	private HashMap<String, double[][]> symbolTable;
+	private HashMap<String, double[][]> inputTable;
 	
 	public CodeGenerator(HashMap<String, double[][]> symbolTable) throws IOException {
-		this.symbolTable = symbolTable;
+		this.inputTable = symbolTable;
 		this.tempFilePath = Files.createTempFile("Matrix", null);
 		this.outputFile =  new PrintWriter(new FileOutputStream(tempFilePath.toFile()), true);
 	}
 	
-	public void printMap() {
-		System.out.println("\nPRINT DA SYMBOL TABLE\n");
-		for (Map.Entry<String, double[][]> entry : symbolTable.entrySet()) {
+	
+	private void initiateVariables(){
+		for (Map.Entry<String, double[][]> entry : inputTable.entrySet()) {
 		    String key = entry.getKey();
 		    double[][] value = entry.getValue();
-		    System.out.println(key + "-");
-		    this.outputFile.write("double[][]"+key+"= new double[][]{");
+		    this.outputFile.write("\t\tdouble[][]"+key+"= new double[][]{");
 		    
 		    int i=value.length;
 		    int h=value[0].length;
 		    
 		    for(int z=0;z<i;z++){
-		        System.out.print("  | ");
 		        this.outputFile.write("{");
 				this.outputFile.flush();
 		        for(int d=0;d<h;d++){
-		            System.out.print(value[z][d]+" ");
 		            this.outputFile.write(value[z][d]+"");
 		    		this.outputFile.flush();
 		            if(d!=(h-1)){
@@ -53,14 +50,22 @@ public class CodeGenerator {
 	            }
 
 				this.outputFile.flush();
-		        System.out.print("|");
-		    	System.out.println();
 		    }
 		     this.outputFile.write("};\n");
-						this.outputFile.flush();
+			this.outputFile.flush();
 		
-	    	System.out.println();
 		}
+	}
+	
+	public void generate() {
+		
+		 this.outputFile.write("public class matrix{\n\n");
+		
+		 this.outputFile.write("\tpublic void calcula(){\n\n");
+	
+		 initiateVariables();
+		 
+		 this.outputFile.write("\n\t}\n}");
 	}
 	
 	public void closeOutput(){
