@@ -210,7 +210,7 @@ public  String  analise(Node node) throws Exception{
 		
 			}
 			if(n.jjtGetChild(i).jjtGetChild(1).toString()!="Matrix")
-				matrixGerada2=analise(n.jjtGetChild(i).jjtGetChild(1));
+				matrixGerada2=analise(n.jjtGetChild(i));
 
 
 			if(matrixGerada1==null && matrixGerada2==null)
@@ -236,7 +236,7 @@ public  String  analise(Node node) throws Exception{
 		
 			}
 			if(n.jjtGetChild(i).jjtGetChild(1).toString()!="Matrix")
-				matrixGerada2=analise(n.jjtGetChild(i).jjtGetChild(1));
+				matrixGerada2=analise(n.jjtGetChild(i));
 
 
 			if(matrixGerada1==null && matrixGerada2==null)
@@ -312,15 +312,13 @@ public  String  analise(Node node) throws Exception{
 	}
 	
 	public void generate() throws Exception {
-		 this.outputFile.write("public class matrix{\n\n");
+		 this.outputFile.write("public class Matrix{\n\n");
 		
 		 this.outputFile.write("\tpublic double[][] calcula(){\n\n");
 	
 		 initiateVariables();
 		 
 		 String output=analise(this.node);
-		 int numeroLinhas= inputTable.get(output).length;
-		 int numeroColunas= inputTable.get(output)[0].length;
 		 this.outputFile.write("\n\n\tdouble[][] "+this.outputName+"= "+output+";\n");
 
 		 this.outputFile.write("\n\treturn "+this.outputName+";\n\t}");
