@@ -61,7 +61,7 @@ public class Matrix{
 
 | < SYMBOL: ["A"-"Z","a"-"z"](["0"-"9","A"-"Z","a"-"z"])* >
 | < TYPE: "boolean" | "byte" | "short" | "int" | "long" | "float" | "double" >
-| < DOUBLE:  (["0"-"9"])+ ("." (["0"-"9"])+)? >|   < CONSTANT : (< DIGIT >)+ >| < DIGIT : [ "0"-"9" ] >
+| < DOUBLE:  ("-")? (["0"-"9"])+ ("." (["0"-"9"])+)? >|   < CONSTANT : (< DIGIT >)+ >| < DIGIT : [ "0"-"9" ] >
 | < LF: "\n" > 
 }
 
@@ -102,12 +102,9 @@ void Output()  #output:{Token i;}
 
 void Array()#void:{Token i;}{
 < BRACKET_LEFT >
-Valores()
-< BRACKET_RIGHT > }
-void Valores() #void:{}{
   (InnerArray())
-  (","InnerArray())*}
-
+  (","InnerArray())*
+< BRACKET_RIGHT > }
 
 void InnerArray():{}{   < BRACKET_LEFT >     Term()  
    (","Term())*   < BRACKET_RIGHT >
@@ -128,11 +125,8 @@ void MathExpression() #void:{}{
 void Priority1(int sign) #void:{}{
  Priority2(sign)
  (
- < PLUS >
- Priority2(1) #Add(2)
- |
- < MINUS >
- Priority2(1) #Sub(2)
+	( < PLUS > Priority2(1) #Add(2) ) |
+	( < MINUS > Priority2(1) #Sub(2) )
  )?
  
 }
@@ -150,11 +144,18 @@ void Priority3(int sign) #void: {} // 1: positive; -1: negative
 {
  Priority4(sign)
  (
-  < TRANSPOSE >
+	< TRANSPOSE > #Tra(1) afterTranspose(sign)
  )?
- (
-   Priority4(1) #Tra(2)
- )?
+ 
+}
+
+void afterTranspose(int sign) #void: {} // 1: positive; -1: negative
+{
+	(
+	 ( < PLUS > Priority4(sign) #Add(2) )|
+	 ( < MINUS > Priority4(sign) #Sub(2) )|
+	 ( < MULTIPLY > Priority4(sign) #Mul(2) )
+	)?
 }
 
 void Priority4(int sign) #void: {Token i;}
