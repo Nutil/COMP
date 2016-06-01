@@ -27,14 +27,14 @@ public class CodeGenerator {
 		    String key = entry.getKey();
 		    double[][] value = entry.getValue();
 		    System.out.println(key + "-");
-		    this.outputFile.write("double[][]"+key+"= [");
+		    this.outputFile.write("double[][]"+key+"= new double[][]{");
 		    
 		    int i=value.length;
 		    int h=value[0].length;
 		    
 		    for(int z=0;z<i;z++){
 		        System.out.print("  | ");
-		        this.outputFile.write("[");
+		        this.outputFile.write("{");
 				this.outputFile.flush();
 		        for(int d=0;d<h;d++){
 		            System.out.print(value[z][d]+" ");
@@ -45,7 +45,7 @@ public class CodeGenerator {
 		        		this.outputFile.flush();
 		            }
 			    }
-		        this.outputFile.write("]");
+		        this.outputFile.write("}");
 		        
 		        if(z!=(i-1)){
 	            	this.outputFile.write(",");
@@ -56,7 +56,7 @@ public class CodeGenerator {
 		        System.out.print("|");
 		    	System.out.println();
 		    }
-		     this.outputFile.write("];\n");
+		     this.outputFile.write("};\n");
 						this.outputFile.flush();
 		
 	    	System.out.println();
