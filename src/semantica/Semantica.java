@@ -109,9 +109,7 @@ public class Semantica {
 					
 				}
 			}
-			else{
-				System.out.println("A variavel a somar/subtrair depende de outra operação, ainda nao sei resolver este caso");
-			}	
+			
 		}
 	}
 	

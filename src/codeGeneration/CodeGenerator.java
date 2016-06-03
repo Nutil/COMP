@@ -16,6 +16,7 @@ public class CodeGenerator {
 	private Node node;
 	private String outputName;
 	private HashMap<String, double[][]> inputTable;
+	private int contadorMatrix=1;
 	
 	public CodeGenerator(HashMap<String, double[][]> symbolTable,Node node,String outputName) throws IOException {
 		this.inputTable = symbolTable;
@@ -37,7 +38,8 @@ public class CodeGenerator {
 		if(numeroLinhas!=numeroLinhas2 || numeroColunas!=numeroColunas2)
 			throw new Exception("Impossivel somar estas matrizes");
 		
-		String newMatrixName= Matrix1+"add"+Matrix2;
+		String newMatrixName= "Matrix-"+contadorMatrix;
+		contadorMatrix++;
 		
 		this.outputFile.write("\n\t\tdouble[][] "+ newMatrixName+" = new double["+numeroLinhas+"]["+numeroColunas+"];\n\n");
 		
@@ -69,7 +71,8 @@ public class CodeGenerator {
 			throw new Exception("Impossivel subtrair estas matrizes");
 			
 		
-		String newMatrixName= Matrix1+"sub"+Matrix2;
+		String newMatrixName= "Matrix-"+contadorMatrix;
+		contadorMatrix++;
 		
 		this.outputFile.write("\n\t\tdouble[][] "+ newMatrixName+" = new double["+numeroLinhas+"]["+numeroColunas+"];\n\n");
 		
@@ -95,7 +98,8 @@ public String writeTransTofile(String Matrix1) throws Exception{
 		int numeroColunas1= inputTable.get(Matrix1)[0].length;
 
 
-		String newMatrixName= Matrix1+"trans";
+		String newMatrixName= "Matrix-"+contadorMatrix;
+		contadorMatrix++;
 		
 		this.outputFile.write("\n\t\tdouble[][] "+ newMatrixName+" = new double["+numeroColunas1+"]["+numeroLinhas1+"];\n\n");
 		
@@ -111,8 +115,6 @@ public String writeTransTofile(String Matrix1) throws Exception{
 		
 		return newMatrixName;
 		
-		 
-		
 	}
 	
 public String writeMulTofile(String Matrix1,String Matrix2) throws Exception{
@@ -125,7 +127,8 @@ public String writeMulTofile(String Matrix1,String Matrix2) throws Exception{
 		
 		if(numeroColunas1 != numeroLinhas2) throw new Exception("Impossivel multiplicar estas matrizes");
 
-		String newMatrixName= Matrix1+"mul"+Matrix2;
+		String newMatrixName= "Matrix-"+contadorMatrix;
+		contadorMatrix++;
 		
 		this.outputFile.write("\n\t\tdouble[][] "+ newMatrixName+" = new double["+numeroLinhas1+"]["+numeroColunas2+"];\n\n");
 		
@@ -174,9 +177,7 @@ public  String  analise(Node node) throws Exception{
 			break;
 
 		case "Mul":
-			
-		
-			
+
 			if(n.jjtGetChild(i).jjtGetChild(0).toString()!="Matrix"){
 		
 				matrixGerada1=analise(n.jjtGetChild(i));
