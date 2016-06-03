@@ -38,7 +38,7 @@ public class CodeGenerator {
 		if(numeroLinhas!=numeroLinhas2 || numeroColunas!=numeroColunas2)
 			throw new Exception("Impossivel somar estas matrizes");
 		
-		String newMatrixName= "Matrix-"+contadorMatrix;
+		String newMatrixName= "Matrix"+contadorMatrix;
 		contadorMatrix++;
 		
 		this.outputFile.write("\n\t\tdouble[][] "+ newMatrixName+" = new double["+numeroLinhas+"]["+numeroColunas+"];\n\n");
@@ -71,7 +71,7 @@ public class CodeGenerator {
 			throw new Exception("Impossivel subtrair estas matrizes");
 			
 		
-		String newMatrixName= "Matrix-"+contadorMatrix;
+		String newMatrixName= "Matrix"+contadorMatrix;
 		contadorMatrix++;
 		
 		this.outputFile.write("\n\t\tdouble[][] "+ newMatrixName+" = new double["+numeroLinhas+"]["+numeroColunas+"];\n\n");
@@ -98,7 +98,7 @@ public String writeTransTofile(String Matrix1) throws Exception{
 		int numeroColunas1= inputTable.get(Matrix1)[0].length;
 
 
-		String newMatrixName= "Matrix-"+contadorMatrix;
+		String newMatrixName= "Matrix"+contadorMatrix;
 		contadorMatrix++;
 		
 		this.outputFile.write("\n\t\tdouble[][] "+ newMatrixName+" = new double["+numeroColunas1+"]["+numeroLinhas1+"];\n\n");
@@ -130,7 +130,7 @@ public String writeMulTofile(String Matrix1,String Matrix2) throws Exception{
 		
 		if(numeroColunas1 != numeroLinhas2) throw new Exception("Impossivel multiplicar estas matrizes");
 
-		String newMatrixName= "Matrix-"+contadorMatrix;
+		String newMatrixName= "Matrix"+contadorMatrix;
 		contadorMatrix++;
 		
 		this.outputFile.write("\n\t\tdouble[][] "+ newMatrixName+" = new double["+numeroLinhas1+"]["+numeroColunas2+"];\n\n");
