@@ -35,17 +35,21 @@ public interface MatrixConstants {
   /** RegularExpression Id. */
   int OUTPUT = 15;
   /** RegularExpression Id. */
-  int SYMBOL = 16;
+  int beforeStart = 16;
   /** RegularExpression Id. */
-  int TYPE = 17;
+  int SYMBOL = 17;
   /** RegularExpression Id. */
-  int DOUBLE = 18;
+  int TYPE = 18;
   /** RegularExpression Id. */
-  int CONSTANT = 19;
+  int DOUBLE = 19;
   /** RegularExpression Id. */
-  int DIGIT = 20;
+  int CONSTANT = 20;
   /** RegularExpression Id. */
-  int LF = 21;
+  int DIGIT = 21;
+  /** RegularExpression Id. */
+  int LF = 22;
+  /** RegularExpression Id. */
+  int matrixDSL = 23;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -68,12 +72,14 @@ public interface MatrixConstants {
     "\")\"",
     "\"input\"",
     "\"output\"",
+    "\".+?(?=@MatrixDSL)\"",
     "<SYMBOL>",
     "<TYPE>",
     "<DOUBLE>",
     "<CONSTANT>",
     "<DIGIT>",
     "\"\\n\"",
+    "\"@MatrixDSL\"",
     "\";\"",
     "\",\"",
   };

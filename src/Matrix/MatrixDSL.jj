@@ -61,10 +61,12 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants/*@egen*/{/*@
 | < INPUT : "input" >
 | < OUTPUT : "output" >
 
+| < beforeStart: ".+?(?=@MatrixDSL)" >
 | < SYMBOL: ["A"-"Z","a"-"z"](["0"-"9","A"-"Z","a"-"z"])* >
 | < TYPE: "boolean" | "byte" | "short" | "int" | "long" | "float" | "double" >
 | < DOUBLE:  ("-")? (["0"-"9"])+ ("." (["0"-"9"])+)? >|   < CONSTANT : (< DIGIT >)+ >| < DIGIT : [ "0"-"9" ] >
-| < LF: "\n" > 
+| < LF: "\n" >
+| < matrixDSL: "@MatrixDSL" >
 }
 
 
@@ -106,9 +108,15 @@ SimpleNode S() : {/*@bgen(jjtree) S */
 
 void Expr()      :{Token i;}
 {
-   (    Input()< LF >
-  )+
-  Output()
+(	< beforeStart >
+	< LF >
+	(
+	  Input() < LF >
+	)+
+	Output() < LF >
+	< matrixDSL >
+)*
+  
  }
 
 void Input()        :{/*@bgen(jjtree) input */
