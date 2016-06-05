@@ -46,9 +46,33 @@ public class Matrix{
 
 	
 
-  }}PARSER_END(Matrix)SKIP :{  " "| "\r"| "\t"}TOKEN : /* OPERATORS */{  < PLUS : "+" > | < MINUS : "-" >| < MULTIPLY : "*" >
+  }}PARSER_END(Matrix)
+
+< DEFAULT > SKIP:
+{
+"@MatrixDSL" : DSL // começas a aceitar os tokens de <DSL> a partir do momento que lês essa string
+}
+
+< DEFAULT > SKIP: // das skip a tudo
+{
+ < ~[] >
+}
+
+< DSL > TOKEN:
+{
+    < ENDMATRIX :"@MatrixDSL" > : END // quando lês esta string voltas ao estado de aceitar código aleatório
+}
+
+
+< END > TOKEN:
+{
+  < ENDFILE :  "\n" | "\r" >
+}
+< DSL > SKIP :{  " "| "\r"| "\t"}<  DSL > TOKEN : /* OPERATORS */{  < PLUS : "+" > | < MINUS : "-" >| < MULTIPLY : "*" >
 | < TRANSPOSE: "'" >| < EQUALS: "=" >
 | < DOUBLE_POINT : ":" >
+| < COMMA : "," >
+| < SEMICOLON : ";" >
 
 | < BRACKET_LEFT: "[" >
 | < BRACKET_RIGHT: "]" >
@@ -57,39 +81,33 @@ public class Matrix{
 | < INPUT : "input" >
 | < OUTPUT : "output" >
 
-| < beforeStart: ".+?(?=@MatrixDSL)" >
-| < SYMBOL: ["A"-"Z","a"-"z"](["0"-"9","A"-"Z","a"-"z"])* >
-| < TYPE: "boolean" | "byte" | "short" | "int" | "long" | "float" | "double" >
-| < DOUBLE:  ("-")? (["0"-"9"])+ ("." (["0"-"9"])+)? >|   < CONSTANT : (< DIGIT >)+ >| < DIGIT : [ "0"-"9" ] >
+| < DOUBLE:  ("-")? (["0"-"9"])+ ("." (["0"-"9"])+)? >| < DIGIT : [ "0"-"9" ] >
 | < LF: "\n" >
-| < matrixDSL: "@MatrixDSL" >
+| < SYMBOL: ["A"-"Z","a"-"z"](["0"-"9","A"-"Z","a"-"z"])* >
+
 }
 
 
+
 SimpleNode S() : {}{
-  Expr()
-  < LF >  {    return jjtThis;
+  Expr()  {    return jjtThis;
   }}
 
 void Expr() #void:{Token i;}
 {
-(	< beforeStart >
-	< LF >
-	(
+	< LF >	(
 	  Input() < LF >
 	)+
 	Output() < LF >
-	< matrixDSL >
-)*
-  
- }
+	< ENDMATRIX >
+	< ENDFILE >}
 
 void Input() #input :{Token i;}{
    <INPUT> i=< SYMBOL >
    {  
 	jjtThis.jjtSetValue( i.image);
     }
-    < DOUBLE_POINT > Array() ";"
+    < DOUBLE_POINT > Array() < SEMICOLON >
 
   }
 
@@ -102,18 +120,18 @@ void Output()  #output:{Token i;}
 	jjtThis.jjtSetValue(i.image);
 
 	}
-    < DOUBLE_POINT > MathExpression() ";"
+    < DOUBLE_POINT > MathExpression() < SEMICOLON >
   )?
 }
 
 void Array()#void:{Token i;}{
 < BRACKET_LEFT >
-  (InnerArray())
-  (","InnerArray())*
+  InnerArray()
+  (< COMMA >InnerArray())*
 < BRACKET_RIGHT > }
 
 void InnerArray():{}{   < BRACKET_LEFT >     Term()  
-   (","Term())*   < BRACKET_RIGHT >
+   (< COMMA >Term())*   < BRACKET_RIGHT >
   }
 
 void Term():{Token i;} 
