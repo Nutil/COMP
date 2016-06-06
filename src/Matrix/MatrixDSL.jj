@@ -63,9 +63,6 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants/*@egen*/{/*@
 	generator.closeOutput();
 
 	System.out.println("Ficheiro criado\n");
-
-	
-
   }}PARSER_END(Matrix)
 
 < DEFAULT > SKIP:
@@ -80,14 +77,15 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants/*@egen*/{/*@
 
 < DSL > TOKEN:
 {
-    < ENDMATRIX :"@MatrixDSL*/" > : END // quando l\u00eas esta string voltas ao estado de aceitar c\u00f3digo aleat\u00f3rio
+    < ENDMATRIX :"@MatrixDSL*/" > : DEFAULT // quando l\u00eas esta string voltas ao estado de aceitar c\u00f3digo aleat\u00f3rio
 }
 
-
+/*
 < END > TOKEN:
 {
   < ENDFILE :  "\n" | "\r" >
 }
+*/
 < DSL > SKIP :{  " "| "\r"| "\t"}<  DSL > TOKEN : /* OPERATORS */{  < PLUS : "+" > | < MINUS : "-" >| < MULTIPLY : "*" >
 | < TRANSPOSE: "'" >| < EQUALS: "=" >
 | < DOUBLE_POINT : ":" >
@@ -121,7 +119,8 @@ SimpleNode S() : {/*@bgen(jjtree) S */
     jjtree.closeNodeScope(jjtn000, true);
     jjtc000 = false;
   }
-/*@egen*/  {    return jjtn000;
+/*@egen*/  {
+    return jjtn000;
   }/*@bgen(jjtree)*/
   } catch (Throwable jjte000) {
     if (jjtc000) {
@@ -150,8 +149,7 @@ void Expr()      :{Token i;}
 	  Input() < LF >
 	)+
 	Output() < LF >
-	< ENDMATRIX >
-	< ENDFILE >}
+	< ENDMATRIX >	}
 
 void Input()        :{/*@bgen(jjtree) input */
                       SimpleNode jjtn000 = new SimpleNode(JJTINPUT);

@@ -59,9 +59,6 @@ public class Matrix{
 	generator.closeOutput();
 
 	System.out.println("Ficheiro criado\n");
-
-	
-
   }}PARSER_END(Matrix)
 
 < DEFAULT > SKIP:
@@ -76,14 +73,15 @@ public class Matrix{
 
 < DSL > TOKEN:
 {
-    < ENDMATRIX :"@MatrixDSL*/" > : END // quando lês esta string voltas ao estado de aceitar código aleatório
+    < ENDMATRIX :"@MatrixDSL*/" > : DEFAULT // quando lês esta string voltas ao estado de aceitar código aleatório
 }
 
-
+/*
 < END > TOKEN:
 {
   < ENDFILE :  "\n" | "\r" >
 }
+*/
 < DSL > SKIP :{  " "| "\r"| "\t"}<  DSL > TOKEN : /* OPERATORS */{  < PLUS : "+" > | < MINUS : "-" >| < MULTIPLY : "*" >
 | < TRANSPOSE: "'" >| < EQUALS: "=" >
 | < DOUBLE_POINT : ":" >
@@ -106,7 +104,8 @@ public class Matrix{
 
 
 SimpleNode S() : {}{
-  Expr()  {    return jjtThis;
+  Expr()  {
+    return jjtThis;
   }}
 
 void Expr() #void:{Token i;}
@@ -115,8 +114,7 @@ void Expr() #void:{Token i;}
 	  Input() < LF >
 	)+
 	Output() < LF >
-	< ENDMATRIX >
-	< ENDFILE >}
+	< ENDMATRIX >	}
 
 void Input() #input :{Token i;}{
    <INPUT> i=< SYMBOL >

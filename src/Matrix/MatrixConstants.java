@@ -13,50 +13,46 @@ public interface MatrixConstants {
   /** RegularExpression Id. */
   int ENDMATRIX = 3;
   /** RegularExpression Id. */
-  int ENDFILE = 4;
+  int PLUS = 7;
   /** RegularExpression Id. */
-  int PLUS = 8;
+  int MINUS = 8;
   /** RegularExpression Id. */
-  int MINUS = 9;
+  int MULTIPLY = 9;
   /** RegularExpression Id. */
-  int MULTIPLY = 10;
+  int TRANSPOSE = 10;
   /** RegularExpression Id. */
-  int TRANSPOSE = 11;
+  int EQUALS = 11;
   /** RegularExpression Id. */
-  int EQUALS = 12;
+  int DOUBLE_POINT = 12;
   /** RegularExpression Id. */
-  int DOUBLE_POINT = 13;
+  int COMMA = 13;
   /** RegularExpression Id. */
-  int COMMA = 14;
+  int SEMICOLON = 14;
   /** RegularExpression Id. */
-  int SEMICOLON = 15;
+  int BRACKET_LEFT = 15;
   /** RegularExpression Id. */
-  int BRACKET_LEFT = 16;
+  int BRACKET_RIGHT = 16;
   /** RegularExpression Id. */
-  int BRACKET_RIGHT = 17;
+  int PARENTHESIS_LEFT = 17;
   /** RegularExpression Id. */
-  int PARENTHESIS_LEFT = 18;
+  int PARENTHESIS_RIGHT = 18;
   /** RegularExpression Id. */
-  int PARENTHESIS_RIGHT = 19;
+  int INPUT = 19;
   /** RegularExpression Id. */
-  int INPUT = 20;
+  int OUTPUT = 20;
   /** RegularExpression Id. */
-  int OUTPUT = 21;
+  int DOUBLE = 21;
   /** RegularExpression Id. */
-  int DOUBLE = 22;
+  int DIGIT = 22;
   /** RegularExpression Id. */
-  int DIGIT = 23;
+  int LF = 23;
   /** RegularExpression Id. */
-  int LF = 24;
-  /** RegularExpression Id. */
-  int SYMBOL = 25;
+  int SYMBOL = 24;
 
   /** Lexical state. */
   int DEFAULT = 0;
   /** Lexical state. */
   int DSL = 1;
-  /** Lexical state. */
-  int END = 2;
 
   /** Literal token values. */
   String[] tokenImage = {
@@ -64,7 +60,6 @@ public interface MatrixConstants {
     "\"/*@MatrixDSL\"",
     "<token of kind 2>",
     "\"@MatrixDSL*/\"",
-    "<ENDFILE>",
     "\" \"",
     "\"\\r\"",
     "\"\\t\"",

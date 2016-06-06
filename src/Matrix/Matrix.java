@@ -60,9 +60,6 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
         generator.closeOutput();
 
         System.out.println("Ficheiro criado\u005cn");
-
-
-
   }
 
   static final public SimpleNode S() throws ParseException {
@@ -116,7 +113,6 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
     Output();
     jj_consume_token(LF);
     jj_consume_token(ENDMATRIX);
-    jj_consume_token(ENDFILE);
   }
 
   static final public void Input() throws ParseException {
@@ -563,7 +559,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x100000,0x200000,0x4000,0x4000,0x2040000,0x300,0x300,0x400,0x800,0x700,0x700,0x2040000,};
+      jj_la1_0 = new int[] {0x80000,0x100000,0x2000,0x2000,0x1020000,0x180,0x180,0x200,0x400,0x380,0x380,0x1020000,};
    }
 
   /** Constructor with InputStream. */
@@ -704,7 +700,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[26];
+    boolean[] la1tokens = new boolean[25];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -718,7 +714,7 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
         }
       }
     }
-    for (int i = 0; i < 26; i++) {
+    for (int i = 0; i < 25; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
