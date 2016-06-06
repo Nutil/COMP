@@ -2,10 +2,13 @@
 package Matrix;
 
 
+import java.util.Scanner;
 import java.util.Hashtable;
 import java.util.HashMap;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import semantica.Semantica;
@@ -15,6 +18,11 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
   protected static JJTMatrixState jjtree = new JJTMatrixState();public static String currentSymbol;
   public static String currentSymbolString;
   public static Hashtable<String, String> symbolTable;
+
+  public Matrix() {
+
+                this(new ByteArrayInputStream("".getBytes()));
+        }
 
         public static void percorreGrafo(Node node, String prefix) {
 
@@ -31,7 +39,15 @@ public class Matrix/*@bgen(jjtree)*/implements MatrixTreeConstants, MatrixConsta
   public static void main(String args [])throws Exception
   {
 
-    Matrix parser = new Matrix(System.in);
+
+        System.out.println("Escreva o nomo do ficheiro de teste (exemplo : ficheiroTeste.java): ");
+          Scanner sc = new Scanner(System.in);
+          String exemplo= sc.nextLine();
+
+    FileInputStream file = new FileInputStream("src/exemplos/"+exemplo);
+    Matrix parser = new Matrix();
+
+    ReInit(file);
         SimpleNode root = parser.S();
 
         Semantica semantica= new Semantica();

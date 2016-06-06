@@ -61,9 +61,9 @@ public interface MatrixConstants {
   /** Literal token values. */
   String[] tokenImage = {
     "<EOF>",
-    "\"@MatrixDSL\"",
+    "\"/*@MatrixDSL\"",
     "<token of kind 2>",
-    "\"@MatrixDSL\"",
+    "\"@MatrixDSL*/\"",
     "<ENDFILE>",
     "\" \"",
     "\"\\r\"",
